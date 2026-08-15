@@ -1,43 +1,6 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Duke {
-    public static class ToDoList {
-        private ArrayList<Task> tasks;
-
-        public ToDoList() {
-            this.tasks = new ArrayList<>();
-        }
-
-        @Override
-        public String toString() {
-            String output = "";
-
-            int count = 1;
-            for (Task task : this.tasks) {
-                output += String.format("%s.%s\n", count++, task);
-            }
-
-            return output;
-        }
-
-        public void add(String entry) {
-            this.tasks.add(new Task(entry));
-        }
-
-        public boolean taskExists(int id) {
-            int idx = id - 1;
-            if (idx < 0 || idx >= tasks.size()) {
-                return false;
-            }
-            return this.tasks.get(idx) != null;
-        }
-
-        public String markTaskAsDone(int id) {
-            this.tasks.get(id - 1).markAsDone();
-            return this.tasks.get(id - 1).toString();
-        }
-    }
     public static void main(String[] args) {
         String banner = "#   #  #####  #####  #    \n"
                 + "##  #  #        #    #    \n"
@@ -76,6 +39,7 @@ public class Duke {
             switch (parts[0]) {
                 case "mark":
                     if (parts.length != 2) {
+                        System.out.println("specify a task number");
                         break;
                     }
                     try {
@@ -93,10 +57,21 @@ public class Duke {
                     break;
                 case "unmark":
                     if (parts.length != 2) {
+                        System.out.println("specify a task number");
                         break;
                     }
-
-                    //TODO implement unmarking
+                    try {
+                        int taskNumber = Integer.parseInt(parts[1]);
+                        if (!toDoList.taskExists(taskNumber)) {
+                            System.out.println("That task number does not exist.");
+                            break;
+                        }
+                        String output = toDoList.unmarkTask(taskNumber);
+                        System.out.println("OK, I've marked this task as done:");
+                        System.out.println(output);
+                    } catch (NumberFormatException e) {
+                        System.out.println("That task number must be an integer.");
+                    }
                     break;
                 case "list":
                     System.out.println("Here are the tasks in your list:");
