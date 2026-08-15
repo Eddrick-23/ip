@@ -24,6 +24,19 @@ public class Duke {
         public void add(String entry) {
             this.tasks.add(new Task(entry));
         }
+
+        public boolean taskExists(int id) {
+            int idx = id - 1;
+            if (idx < 0 || idx >= tasks.size()) {
+                return false;
+            }
+            return this.tasks.get(idx) != null;
+        }
+
+        public String markTaskAsDone(int id) {
+            this.tasks.get(id - 1).markAsDone();
+            return this.tasks.get(id - 1).toString();
+        }
     }
     public static void main(String[] args) {
         String banner = "#   #  #####  #####  #    \n"
@@ -59,7 +72,32 @@ public class Duke {
                 break;
             }
 
-            switch (input) {
+            String[] parts = input.trim().split("\\s+");
+            switch (parts[0]) {
+                case "mark":
+                    if (parts.length != 2) {
+                        break;
+                    }
+                    try {
+                        int taskNumber = Integer.parseInt(parts[1]);
+                        if (!toDoList.taskExists(taskNumber)) {
+                            System.out.println("That task number does not exist.");
+                            break;
+                        }
+                        String output = toDoList.markTaskAsDone(taskNumber);
+                        System.out.println("Nice! I've marked this task as done:");
+                        System.out.println(output);
+                    } catch (NumberFormatException e) {
+                        System.out.println("That task number must be an integer.");
+                    }
+                    break;
+                case "unmark":
+                    if (parts.length != 2) {
+                        break;
+                    }
+
+                    //TODO implement unmarking
+                    break;
                 case "list":
                     System.out.println("Here are the tasks in your list:");
                     System.out.print(toDoList);
