@@ -1,10 +1,23 @@
 public class Duke {
     public static void main(String[] args) {
-        String banner = " ____        _        \n"
-                + "|  _ \\ _   _| | _____ \n"
-                + "| | | | | | | |/ / _ \\\n"
-                + "| |_| | |_| |   <  __/\n"
-                + "|____/ \\__,_|_|\\_\\___|\n";
-        System.out.println(banner);
+        String banner =
+                  "#   #  #####  #####  #    \n"
+                + "##  #  #        #    #    \n"
+                + "# # #  ####     #    #    \n"
+                + "#  ##  #        #    #    \n"
+                + "#   #  #####  #####  #####\n";
+
+        String chatbotName = "Neil";
+        String output = String.format(
+                "____________________________________________________________\n" +
+                "%s\n" +
+                "Hello! I'm %s.\n" +
+                "What can I do for you?\n" +
+                "____________________________________________________________\n" +
+                "Bye. Hope to see you again soon!\n" +
+                "____________________________________________________________\n", banner, chatbotName);
+
+        System.out.println(output);
+
     }
 }
