@@ -3,10 +3,10 @@ import java.util.Scanner;
 
 public class Duke {
     public static class ToDoList {
-        private ArrayList<String> entries;
+        private ArrayList<Task> tasks;
 
         public ToDoList() {
-            this.entries = new ArrayList<>();
+            this.tasks = new ArrayList<>();
         }
 
         @Override
@@ -14,15 +14,15 @@ public class Duke {
             String output = "";
 
             int count = 1;
-            for (String entry : entries) {
-                output += String.format("%s. %s\n", count++, entry);
+            for (Task task : this.tasks) {
+                output += String.format("%s.%s\n", count++, task);
             }
 
             return output;
         }
 
         public void add(String entry) {
-            entries.add(entry);
+            this.tasks.add(new Task(entry));
         }
     }
     public static void main(String[] args) {
@@ -61,6 +61,7 @@ public class Duke {
 
             switch (input) {
                 case "list":
+                    System.out.println("Here are the tasks in your list:");
                     System.out.print(toDoList);
                     break;
                 default:
