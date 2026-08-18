@@ -19,8 +19,8 @@ public class ToDoList {
         return output;
     }
 
-    public void add(String entry) {
-        this.tasks.add(new Task(entry));
+    public void add(Task task) {
+        this.tasks.add(task);
     }
 
     public boolean taskExists(int id) {
@@ -39,5 +39,9 @@ public class ToDoList {
     public String unmarkTask(int id) {
         this.tasks.get(id - 1).unmark();
         return this.tasks.get(id - 1).toString();
+    }
+
+    public int size() {
+        return this.tasks.size();
     }
 }

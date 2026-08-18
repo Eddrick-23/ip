@@ -1,6 +1,68 @@
 import java.util.Scanner;
 
 public class Duke {
+    private static Task parseTask(String input) throws IllegalArgumentException {
+        // split to at most two parts
+        // front is the command, remaining is the string to parse
+        // to extract descriptions and times.
+        String[] parts = input.trim().split("\\s+", 2);
+
+        if (parts.length < 2) {
+            throw new IllegalArgumentException("Please provide a task description.");
+        }
+
+        String command = parts[0];
+        String arguments = parts[1].trim();
+
+        switch (command) {
+            case "todo":
+                return new ToDoTask(arguments);
+            case "deadline":
+                String[] deadlineParts =
+                        arguments.split("\\s+/by\\s+", 2);
+                if (deadlineParts.length != 2
+                        || deadlineParts[0].isBlank()
+                        || deadlineParts[1].isBlank()) {
+                    throw new IllegalArgumentException(
+                            "Use: deadline DESCRIPTION /by DATE");
+                }
+
+                return new DeadlineTask(
+                        deadlineParts[0].trim(),
+                        deadlineParts[1].trim()
+                );
+
+            case "event":
+                String[] fromParts =
+                        arguments.split("\\s+/from\\s+", 2);
+
+                if (fromParts.length != 2) {
+                    throw new IllegalArgumentException(
+                            "Use: event DESCRIPTION /from START /to END");
+                }
+
+                String[] toParts =
+                        fromParts[1].split("\\s+/to\\s+", 2);
+
+                if (toParts.length != 2
+                        || fromParts[0].isBlank()
+                        || toParts[0].isBlank()
+                        || toParts[1].isBlank()) {
+                    throw new IllegalArgumentException(
+                            "Use: event DESCRIPTION /from START /to END");
+                }
+
+                return new EventTask(
+                        fromParts[0].trim(),
+                        toParts[0].trim(),
+                        toParts[1].trim()
+                );
+
+                default:
+                    throw new IllegalArgumentException("Unknown Task type");
+        }
+
+    }
     public static void main(String[] args) {
         String banner = "#   #  #####  #####  #    \n"
                 + "##  #  #        #    #    \n"
@@ -78,8 +140,14 @@ public class Duke {
                     System.out.print(toDoList);
                     break;
                 default:
-                    System.out.println("added: " + input);
-                    toDoList.add(input);
+                    try {
+                        Task task = parseTask(input);
+                        toDoList.add(task);
+                        System.out.println("Got it. I've added this task:\n " + task);
+                        System.out.println("Now you have " + toDoList.size() + " tasks in this list.");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
+                    }
             }
             System.out.print(divider);
         }
