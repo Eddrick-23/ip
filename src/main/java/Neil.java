@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Duke {
+public class Neil {
     private static Task parseTask(String input) throws IllegalArgumentException {
         // split to at most two parts
         // front is the command, remaining is the string to parse
