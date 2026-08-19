@@ -80,7 +80,7 @@ public class Neil {
 
     }
 
-    private static int parseTaskNumber(String[] parts , ToDoList toDoList) throws NeilException {
+    private static int parseTaskNumber(String[] parts) throws NeilException {
         if (parts.length != 2) {
             throw new NeilException("Please specify a task number.");
         }
@@ -94,10 +94,6 @@ public class Neil {
 
         if (taskNumber <= 0) {
             throw new NeilException("The task number must be a positive integer");
-        }
-
-        if (!toDoList.taskExists(taskNumber)) {
-            throw new NeilException("The task " + taskNumber + " does not exist");
         }
 
         return taskNumber;
@@ -140,20 +136,21 @@ public class Neil {
             try {
                 switch (parts[0]) {
                     case "mark": {
-                        int taskNumber = parseTaskNumber(parts, toDoList);
-                        Task task = toDoList.markTaskAsDone(taskNumber); System.out.println("Nice! I've marked this task as done:");
+                        int taskNumber = parseTaskNumber(parts);
+                        Task task = toDoList.markTaskAsDone(taskNumber);
+                        System.out.println("Nice! I've marked this task as done:");
                         System.out.println(task);
                         break;
                     }
                     case "unmark": {
-                        int taskNumber = parseTaskNumber(parts, toDoList);
+                        int taskNumber = parseTaskNumber(parts);
                         Task task= toDoList.unmarkTask(taskNumber);
                         System.out.println("OK, I've marked this task as not done yet:");
                         System.out.println(task);
                         break;
                     }
                     case "delete": {
-                        int taskNumber = parseTaskNumber(parts, toDoList);
+                        int taskNumber = parseTaskNumber(parts);
                         Task task = toDoList.remove(taskNumber);
                         System.out.println("Noted. I've removed this task:");
                         System.out.println(task);

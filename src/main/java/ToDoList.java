@@ -23,11 +23,14 @@ public class ToDoList {
         this.tasks.add(task);
     }
 
-    public Task remove(int id) {
+    public Task remove(int id) throws NeilException{
+        if  (!this.taskExists(id)) {
+            throw new NeilException("The task " + id + " does not exist");
+        }
         return this.tasks.remove(id - 1);
     }
 
-    public boolean taskExists(int id) {
+    private boolean taskExists(int id) {
         int idx = id - 1;
         if (idx < 0 || idx >= tasks.size()) {
             return false;
@@ -35,12 +38,18 @@ public class ToDoList {
         return this.tasks.get(idx) != null;
     }
 
-    public Task markTaskAsDone(int id) {
+    public Task markTaskAsDone(int id) throws NeilException {
+        if  (!this.taskExists(id)) {
+            throw new NeilException("The task " + id + " does not exist");
+        }
         this.tasks.get(id - 1).markAsDone();
         return this.tasks.get(id - 1);
     }
 
-    public Task unmarkTask(int id) {
+    public Task unmarkTask(int id) throws NeilException {
+        if  (!this.taskExists(id)) {
+            throw new NeilException("The task " + id + " does not exist");
+        }
         this.tasks.get(id - 1).unmark();
         return this.tasks.get(id - 1);
     }
