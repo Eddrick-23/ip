@@ -1,17 +1,33 @@
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Neil {
-    private static Task parseTask(String input) throws IllegalArgumentException {
+    private static HashSet<String> supportedCommands = new HashSet<>(Set.of("todo", "deadline", "event"));
+    private static Task parseTask(String input) throws NeilException {
         // split to at most two parts
         // front is the command, remaining is the string to parse
         // to extract descriptions and times.
-        String[] parts = input.trim().split("\\s+", 2);
 
-        if (parts.length < 2) {
-            throw new IllegalArgumentException("Please provide a task description.");
+        // handle empty inputs
+        String trimmedInput = input.trim();
+        if (trimmedInput.isEmpty()) {
+            throw new NeilException("Please provide a command");
         }
 
+        String[] parts = trimmedInput.split("\\s+", 2);
         String command = parts[0];
+
+        // handle unsupported commands
+        if (!supportedCommands.contains(command)) {
+                throw new NeilException("command " + command + " not supported");
+        }
+
+        // handle missing descriptions
+        if (parts.length < 2 || parts[1].isBlank()) {
+            throw new NeilException("Please provide a task description");
+        }
+
         String arguments = parts[1].trim();
 
         switch (command) {
@@ -23,7 +39,7 @@ public class Neil {
                 if (deadlineParts.length != 2
                         || deadlineParts[0].isBlank()
                         || deadlineParts[1].isBlank()) {
-                    throw new IllegalArgumentException(
+                    throw new NeilException(
                             "Use: deadline DESCRIPTION /by DATE");
                 }
 
@@ -37,7 +53,7 @@ public class Neil {
                         arguments.split("\\s+/from\\s+", 2);
 
                 if (fromParts.length != 2) {
-                    throw new IllegalArgumentException(
+                    throw new NeilException(
                             "Use: event DESCRIPTION /from START /to END");
                 }
 
@@ -48,7 +64,7 @@ public class Neil {
                         || fromParts[0].isBlank()
                         || toParts[0].isBlank()
                         || toParts[1].isBlank()) {
-                    throw new IllegalArgumentException(
+                    throw new NeilException(
                             "Use: event DESCRIPTION /from START /to END");
                 }
 
@@ -59,9 +75,32 @@ public class Neil {
                 );
 
                 default:
-                    throw new IllegalArgumentException("Unknown Task type");
+                    throw new NeilException("Unknown Task type");
         }
 
+    }
+
+    private static int parseTaskNumber(String[] parts , ToDoList toDoList) throws NeilException {
+        if (parts.length != 2) {
+            throw new NeilException("Please specify a task number.");
+        }
+
+        int taskNumber;
+        try {
+            taskNumber = Integer.parseInt(parts[1]);
+        } catch (NumberFormatException e) {
+            throw new NeilException("The task number must be a positive integer");
+        }
+
+        if (taskNumber <= 0) {
+            throw new NeilException("The task number must be a positive integer");
+        }
+
+        if (!toDoList.taskExists(taskNumber)) {
+            throw new NeilException("The task " + taskNumber + " does not exist");
+        }
+
+        return taskNumber;
     }
     public static void main(String[] args) {
         String banner = "#   #  #####  #####  #    \n"
@@ -98,56 +137,34 @@ public class Neil {
             }
 
             String[] parts = input.trim().split("\\s+");
-            switch (parts[0]) {
-                case "mark":
-                    if (parts.length != 2) {
-                        System.out.println("specify a task number");
-                        break;
-                    }
-                    try {
-                        int taskNumber = Integer.parseInt(parts[1]);
-                        if (!toDoList.taskExists(taskNumber)) {
-                            System.out.println("That task number does not exist.");
-                            break;
-                        }
-                        String output = toDoList.markTaskAsDone(taskNumber);
+            try {
+                switch (parts[0]) {
+                    case "mark": {
+                        int taskNumber = parseTaskNumber(parts, toDoList);
+                        String taskState = toDoList.markTaskAsDone(taskNumber);
                         System.out.println("Nice! I've marked this task as done:");
-                        System.out.println(output);
-                    } catch (NumberFormatException e) {
-                        System.out.println("That task number must be an integer.");
-                    }
-                    break;
-                case "unmark":
-                    if (parts.length != 2) {
-                        System.out.println("specify a task number");
+                        System.out.println(taskState);
                         break;
                     }
-                    try {
-                        int taskNumber = Integer.parseInt(parts[1]);
-                        if (!toDoList.taskExists(taskNumber)) {
-                            System.out.println("That task number does not exist.");
-                            break;
-                        }
-                        String output = toDoList.unmarkTask(taskNumber);
-                        System.out.println("OK, I've marked this task as done:");
-                        System.out.println(output);
-                    } catch (NumberFormatException e) {
-                        System.out.println("That task number must be an integer.");
+                    case "unmark": {
+                        int taskNumber = parseTaskNumber(parts, toDoList);
+                        String taskState = toDoList.unmarkTask(taskNumber);
+                        System.out.println("OK, I've marked this task as not done yet:");
+                        System.out.println(taskState);
+                        break;
                     }
-                    break;
-                case "list":
-                    System.out.println("Here are the tasks in your list:");
-                    System.out.print(toDoList);
-                    break;
-                default:
-                    try {
-                        Task task = parseTask(input);
-                        toDoList.add(task);
-                        System.out.println("Got it. I've added this task:\n " + task);
-                        System.out.println("Now you have " + toDoList.size() + " tasks in this list.");
-                    } catch (IllegalArgumentException e) {
-                        System.out.println(e.getMessage());
-                    }
+                    case "list":
+                        System.out.println("Here are the tasks in your list:");
+                        System.out.print(toDoList);
+                        break;
+                    default:
+                            Task task = parseTask(input);
+                            toDoList.add(task);
+                            System.out.println("Got it. I've added this task:\n " + task);
+                            System.out.println("Now you have " + toDoList.size() + " tasks in this list.");
+                }
+            } catch (NeilException e) {
+                System.out.println(e.getMessage());
             }
             System.out.print(divider);
         }
