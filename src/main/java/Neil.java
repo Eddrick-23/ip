@@ -20,7 +20,7 @@ public class Neil {
 
         // handle unsupported commands
         if (!supportedCommands.contains(command)) {
-                throw new NeilException("command " + command + " not supported");
+            throw new NeilException("command " + command + " not supported");
         }
 
         // handle missing descriptions
@@ -74,8 +74,8 @@ public class Neil {
                         toParts[1].trim()
                 );
 
-                default:
-                    throw new NeilException("Unknown Task type");
+            default:
+                throw new NeilException("Unknown Task type");
         }
 
     }
@@ -141,16 +141,23 @@ public class Neil {
                 switch (parts[0]) {
                     case "mark": {
                         int taskNumber = parseTaskNumber(parts, toDoList);
-                        String taskState = toDoList.markTaskAsDone(taskNumber);
-                        System.out.println("Nice! I've marked this task as done:");
-                        System.out.println(taskState);
+                        Task task = toDoList.markTaskAsDone(taskNumber); System.out.println("Nice! I've marked this task as done:");
+                        System.out.println(task);
                         break;
                     }
                     case "unmark": {
                         int taskNumber = parseTaskNumber(parts, toDoList);
-                        String taskState = toDoList.unmarkTask(taskNumber);
+                        Task task= toDoList.unmarkTask(taskNumber);
                         System.out.println("OK, I've marked this task as not done yet:");
-                        System.out.println(taskState);
+                        System.out.println(task);
+                        break;
+                    }
+                    case "delete": {
+                        int taskNumber = parseTaskNumber(parts, toDoList);
+                        Task task = toDoList.remove(taskNumber);
+                        System.out.println("Noted. I've removed this task:");
+                        System.out.println(task);
+                        System.out.println("Now you have " + toDoList.size() + " tasks in the list.");
                         break;
                     }
                     case "list":
@@ -158,10 +165,10 @@ public class Neil {
                         System.out.print(toDoList);
                         break;
                     default:
-                            Task task = parseTask(input);
-                            toDoList.add(task);
-                            System.out.println("Got it. I've added this task:\n " + task);
-                            System.out.println("Now you have " + toDoList.size() + " tasks in this list.");
+                        Task task = parseTask(input);
+                        toDoList.add(task);
+                        System.out.println("Got it. I've added this task:\n " + task);
+                        System.out.println("Now you have " + toDoList.size() + " tasks in the list.");
                 }
             } catch (NeilException e) {
                 System.out.println(e.getMessage());

@@ -23,6 +23,10 @@ public class ToDoList {
         this.tasks.add(task);
     }
 
+    public Task remove(int id) {
+        return this.tasks.remove(id - 1);
+    }
+
     public boolean taskExists(int id) {
         int idx = id - 1;
         if (idx < 0 || idx >= tasks.size()) {
@@ -31,14 +35,14 @@ public class ToDoList {
         return this.tasks.get(idx) != null;
     }
 
-    public String markTaskAsDone(int id) {
+    public Task markTaskAsDone(int id) {
         this.tasks.get(id - 1).markAsDone();
-        return this.tasks.get(id - 1).toString();
+        return this.tasks.get(id - 1);
     }
 
-    public String unmarkTask(int id) {
+    public Task unmarkTask(int id) {
         this.tasks.get(id - 1).unmark();
-        return this.tasks.get(id - 1).toString();
+        return this.tasks.get(id - 1);
     }
 
     public int size() {
