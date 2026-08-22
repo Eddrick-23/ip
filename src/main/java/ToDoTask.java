@@ -8,4 +8,13 @@ public class ToDoTask extends Task {
         return "[T]" + super.toString();
     }
 
+    @Override
+    public String encode() {
+        return String.format(
+                "T | %d | %s",
+                isDone ? 1 : 0,
+                description
+        );
+    }
+
 }

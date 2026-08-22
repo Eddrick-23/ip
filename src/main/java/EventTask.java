@@ -11,4 +11,15 @@ public class EventTask extends Task {
     public String toString() {
         return "[E]" + super.toString() + String.format(" (from: %s to: %s)", this.from, this.to);
     }
+
+    @Override
+    public String encode() {
+        return String.format(
+                "E | %d | %s | %s | %s",
+                isDone ? 1 : 0,
+                description,
+                from,
+                to
+        );
+    }
 }
