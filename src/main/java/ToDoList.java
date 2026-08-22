@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class ToDoList {
     private ArrayList<Task> tasks;
@@ -56,5 +57,9 @@ public class ToDoList {
 
     public int size() {
         return this.tasks.size();
+    }
+
+    public List<Task> getTasks() {
+        return List.copyOf(this.tasks);
     }
 }
