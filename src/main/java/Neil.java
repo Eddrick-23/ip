@@ -15,7 +15,7 @@ public class Neil {
                 toDoList.add(task);
             }
         } catch (NeilException e) {
-            System.out.println(e.getMessage());
+            ui.showError(e.getMessage());
             return;
         }
 
@@ -34,40 +34,32 @@ public class Neil {
                         int taskNumber = Parser.parseTaskNumber(parts);
                         Task task = toDoList.markTaskAsDone(taskNumber);
                         storage.save(toDoList.getTasks());
-                        ui.showMessage(String.format("Nice! I've marked this task as done:\n%s", task));
+                        ui.showTaskMarked(task);
                         break;
                     }
                     case "unmark": {
                         int taskNumber = Parser.parseTaskNumber(parts);
                         Task task= toDoList.unmarkTask(taskNumber);
                         storage.save(toDoList.getTasks());
-                        ui.showMessage(String.format("OK, I've marked this task as not done yet:\n%s", task));
+                        ui.showTaskUnmarked(task);
                         break;
                     }
                     case "delete": {
                         int taskNumber = Parser.parseTaskNumber(parts);
                         Task task = toDoList.remove(taskNumber);
                         storage.save(toDoList.getTasks());
-                        String msg = String.format(
-                                "Noted. I've removed this task:\n%s\nNow you have %d tasks in this list.",
-                                task,
-                                toDoList.size()
-                        );
-                        ui.showMessage(msg);
+                        ui.showTaskDeleted(task, toDoList.size());
                         break;
                     }
                     case "list": {
-                        String msg = String.format("Here are the tasks in your list:\n%s", toDoList);
-                        ui.showMessage(msg);
+                        ui.showTaskList(toDoList);
                         break;
                     }
                     default:
                         Task task = Parser.parseTask(input);
                         toDoList.add(task);
                         storage.save(toDoList.getTasks());
-                        String msg = String.format("Got it. I've added this task:\n%s\n", task);
-                        msg += "Now you have " + toDoList.size() + " tasks in the list.";
-                        ui.showMessage(msg);
+                        ui.showTaskAdded(task, toDoList.size());
                 }
             } catch (NeilException e) {
                 ui.showError(e.getMessage());

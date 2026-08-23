@@ -44,7 +44,46 @@ public class Ui {
         System.out.println(DIVIDER);
     }
 
-    public void showMessage(String message) {
+    public void showTaskMarked(Task task) {
+        showMessage(String.format(
+                "Nice! I've marked this task as done:\n%s",
+                task
+        ));
+    }
+
+    public void showTaskUnmarked(Task task) {
+        showMessage(String.format(
+                "OK, I've marked this task as not done yet:\n%s",
+                task
+        ));
+    }
+
+    public void showTaskDeleted(Task task, int taskCount) {
+        showMessage(String.format(
+                "Noted. I've removed this task:\n%s\n"
+                        + "Now you have %d tasks in this list.",
+                task,
+                taskCount
+        ));
+    }
+
+    public void showTaskList(ToDoList toDoList) {
+        showMessage(String.format(
+                "Here are the tasks in your list:\n%s",
+                toDoList
+        ));
+    }
+
+    public void showTaskAdded(Task task, int taskCount) {
+        showMessage(String.format(
+                "Got it. I've added this task:\n%s\n"
+                        + "Now you have %d tasks in the list.",
+                task,
+                taskCount
+        ));
+    }
+
+    private void showMessage(String message) {
         System.out.println(message);
         System.out.println(DIVIDER);
     }
