@@ -1,3 +1,6 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+
 public abstract class Task {
     protected String description;
     protected boolean isDone;
@@ -72,7 +75,17 @@ public abstract class Task {
                     throw new NeilException("Invalid saved deadline: " + line);
                 }
 
-                task = new DeadlineTask(description, parts[3]);
+                try {
+                    LocalDate deadline = LocalDate.parse(parts[3]);
+
+                    task = new DeadlineTask(
+                            description,
+                            deadline
+                    );
+                } catch (DateTimeParseException e) {
+                    throw new NeilException(
+                            "Invalid saved deadline date: " + line);
+                }
                 break;
 
             case "E":
