@@ -34,7 +34,6 @@ public class Ui {
     }
 
     public void showGoodbye() {
-        System.out.println(DIVIDER);
         System.out.println(
                 "Bye. Hope to see you again soon!");
         System.out.println(DIVIDER);

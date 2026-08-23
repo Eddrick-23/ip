@@ -1,9 +1,15 @@
 public class Neil {
-    private static Storage storage = new Storage("./data/neil.txt");
-    private static Ui ui = new Ui();
-    public static void main(String[] args) {
-        ToDoList toDoList = new ToDoList();
+    private final Storage storage;
+    private final Ui ui;
+    private final ToDoList toDoList;
 
+    public Neil(String filePath) {
+        this.storage = new Storage(filePath);
+        this.ui = new Ui();
+        this.toDoList = new ToDoList();
+    }
+
+    public void run() {
         try {
             for (Task task : storage.load()) {
                 toDoList.add(task);
@@ -14,8 +20,6 @@ public class Neil {
         }
 
         ui.showWelcome();
-        // main loop
-        // "bye" exits the loop.
         while (true) {
             String input = ui.readCommand();
 
@@ -45,7 +49,7 @@ public class Neil {
                         Task task = toDoList.remove(taskNumber);
                         storage.save(toDoList.getTasks());
                         String msg = String.format(
-                                "Noted. I've removed this task:\n%s\n Now you have %d tasks in this list.",
+                                "Noted. I've removed this task:\n%s\nNow you have %d tasks in this list.",
                                 task,
                                 toDoList.size()
                         );
@@ -61,7 +65,6 @@ public class Neil {
                         Task task = Parser.parseTask(input);
                         toDoList.add(task);
                         storage.save(toDoList.getTasks());
-                        // TODO extra space on the last line?
                         String msg = String.format("Got it. I've added this task:\n%s\n", task);
                         msg += "Now you have " + toDoList.size() + " tasks in the list.";
                         ui.showMessage(msg);
@@ -73,6 +76,9 @@ public class Neil {
 
         ui.showGoodbye();
         ui.close();
+    }
 
+    public static void main(String[] args) {
+        new Neil("data/neil.txt").run();
     }
 }
