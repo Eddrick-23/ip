@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public class Neil {
     private static Storage storage = new Storage("./data/neil.txt");
     private static Ui ui = new Ui();
@@ -69,7 +67,7 @@ public class Neil {
                         ui.showMessage(msg);
                 }
             } catch (NeilException e) {
-                System.out.println(e.getMessage());
+                ui.showError(e.getMessage());
             }
         }
 
