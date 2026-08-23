@@ -1,6 +1,8 @@
+import java.time.format.DateTimeParseException;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
+import java.time.LocalDate;
 
 public class Neil {
     private static Storage storage = new Storage("./data/neil.txt");
@@ -44,11 +46,12 @@ public class Neil {
                     throw new NeilException(
                             "Use: deadline DESCRIPTION /by DATE");
                 }
-
-                return new DeadlineTask(
-                        deadlineParts[0].trim(),
-                        deadlineParts[1].trim()
-                );
+                try {
+                    LocalDate deadline = LocalDate.parse(deadlineParts[1]);
+                    return new DeadlineTask(deadlineParts[0], deadline);
+                } catch (DateTimeParseException e) {
+                    throw new NeilException("Please provide a valid date in yyyy-MM-dd format");
+                }
 
             case "event":
                 String[] fromParts =
