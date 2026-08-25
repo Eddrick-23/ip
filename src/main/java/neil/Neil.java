@@ -1,3 +1,12 @@
+package neil;
+
+import neil.exception.NeilException;
+import neil.parser.Parser;
+import neil.storage.Storage;
+import neil.task.Task;
+import neil.task.ToDoList;
+import neil.ui.Ui;
+
 public class Neil {
     private final Storage storage;
     private final Ui ui;

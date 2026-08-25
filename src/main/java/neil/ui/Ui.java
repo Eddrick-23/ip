@@ -1,4 +1,9 @@
+package neil.ui;
+
 import java.util.Scanner;
+
+import neil.task.Task;
+import neil.task.ToDoList;
 
 /**
  * Handles input from and output to the user.
