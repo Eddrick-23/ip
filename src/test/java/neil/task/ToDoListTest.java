@@ -104,7 +104,7 @@ class ToDoListTest {
     /**
      * Verifies that an operation rejects a task number that is not in the list.
      *
-     * @param operation operation that uses a task number
+     * @param operation operation that uses a task number.
      */
     private void assertTaskDoesNotExist(TaskListOperation operation) {
         assertThrows(NeilException.class, operation::perform);

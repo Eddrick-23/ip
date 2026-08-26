@@ -7,17 +7,28 @@ import neil.task.Task;
 import neil.task.ToDoList;
 import neil.ui.Ui;
 
+/**
+ * Runs the Neil task-management application.
+ */
 public class Neil {
     private final Storage storage;
     private final Ui ui;
     private final ToDoList toDoList;
 
+    /**
+     * Creates the application using the specified storage file.
+     *
+     * @param filePath path to the task storage file.
+     */
     public Neil(String filePath) {
         this.storage = new Storage(filePath);
         this.ui = new Ui();
         this.toDoList = new ToDoList();
     }
 
+    /**
+     * Starts the command-processing loop.
+     */
     public void run() {
         try {
             for (Task task : storage.load()) {
@@ -48,7 +59,7 @@ public class Neil {
                     }
                     case "unmark": {
                         int taskNumber = Parser.parseTaskNumber(parts);
-                        Task task= toDoList.unmarkTask(taskNumber);
+                        Task task = toDoList.unmarkTask(taskNumber);
                         storage.save(toDoList.getTasks());
                         ui.showTaskUnmarked(task);
                         break;
@@ -79,6 +90,11 @@ public class Neil {
         ui.close();
     }
 
+    /**
+     * Starts the application.
+     *
+     * @param args command-line arguments.
+     */
     public static void main(String[] args) {
         new Neil("data/neil.txt").run();
     }

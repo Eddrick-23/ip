@@ -128,7 +128,7 @@ class TaskTest {
     /**
      * Verifies that decoding invalid saved data reports a domain-specific exception.
      *
-     * @param encodedTask invalid saved task data
+     * @param encodedTask invalid saved task data.
      */
     private void assertInvalidSavedTask(String encodedTask) {
         assertThrows(NeilException.class, () -> Task.decode(encodedTask));

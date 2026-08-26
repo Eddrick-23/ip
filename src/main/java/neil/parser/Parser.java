@@ -21,12 +21,14 @@ public final class Parser {
         // Prevent construction of this utility class.
     }
 
+    /**
+     * Parses a task-creation command into a task.
+     *
+     * @param input raw user command.
+     * @return task represented by the command.
+     * @throws NeilException if the command is invalid.
+     */
     public static Task parseTask(String input) throws NeilException {
-        // split to at most two parts
-        // front is the command, remaining is the string to parse
-        // to extract descriptions and times.
-
-        // handle empty inputs
         String trimmedInput = input.trim();
         if (trimmedInput.isEmpty()) {
             throw new NeilException("Please provide a command");
@@ -35,12 +37,10 @@ public final class Parser {
         String[] parts = trimmedInput.split("\\s+", 2);
         String command = parts[0];
 
-        // handle unsupported commands
         if (!TASK_COMMANDS.contains(command)) {
             throw new NeilException("command " + command + " not supported");
         }
 
-        // handle missing descriptions
         if (parts.length < 2 || parts[1].isBlank()) {
             throw new NeilException("Please provide a task description");
         }
@@ -63,7 +63,8 @@ public final class Parser {
                     LocalDate deadline = LocalDate.parse(deadlineParts[1]);
                     return new DeadlineTask(deadlineParts[0], deadline);
                 } catch (DateTimeParseException e) {
-                    throw new NeilException("Please provide a valid date in yyyy-MM-dd format");
+                    throw new NeilException(
+                            "Please provide a valid date in yyyy-MM-dd format");
                 }
 
             case "event":
@@ -97,6 +98,13 @@ public final class Parser {
         }
     }
 
+    /**
+     * Parses a positive task number from a command split into words.
+     *
+     * @param parts command words containing one task number.
+     * @return parsed positive task number.
+     * @throws NeilException if the command does not contain one positive integer.
+     */
     public static int parseTaskNumber(String[] parts) throws NeilException {
         if (parts.length != 2) {
             throw new NeilException("Please specify a task number.");

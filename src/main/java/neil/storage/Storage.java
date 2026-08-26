@@ -16,6 +16,11 @@ import neil.task.Task;
 public class Storage {
     private final Path filePath;
 
+    /**
+     * Creates storage backed by the specified file.
+     *
+     * @param filePath path to the task storage file.
+     */
     public Storage(String filePath) {
         this.filePath = Path.of(filePath);
     }
@@ -23,8 +28,8 @@ public class Storage {
     /**
      * Saves all tasks to the configured file.
      *
-     * @param tasks tasks to save
-     * @throws NeilException if the file cannot be written
+     * @param tasks tasks to save.
+     * @throws NeilException if the file cannot be written.
      */
     public void save(List<Task> tasks) throws NeilException {
         List<String> lines = new ArrayList<>();
@@ -50,8 +55,8 @@ public class Storage {
      * Loads tasks from the configured file.
      * Returns an empty list if the file does not exist yet.
      *
-     * @return tasks loaded from the file
-     * @throws NeilException if the file cannot be read or decoded
+     * @return tasks loaded from the file.
+     * @throws NeilException if the file cannot be read or decoded.
      */
     public List<Task> load() throws NeilException {
         List<Task> tasks = new ArrayList<>();
@@ -61,7 +66,9 @@ public class Storage {
         }
 
         try {
-            List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
+            List<String> lines = Files.readAllLines(
+                    filePath,
+                    StandardCharsets.UTF_8);
 
             for (String line : lines) {
                 if (!line.isBlank()) {

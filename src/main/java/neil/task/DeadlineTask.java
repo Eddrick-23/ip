@@ -3,9 +3,21 @@ package neil.task;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class DeadlineTask extends Task{
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy");
+/**
+ * Represents a task with a deadline date.
+ */
+public class DeadlineTask extends Task {
+    private static final DateTimeFormatter DISPLAY_DATE_FORMATTER =
+            DateTimeFormatter.ofPattern("MMM d yyyy");
+
     private final LocalDate deadline;
+
+    /**
+     * Creates a task with the specified description and deadline.
+     *
+     * @param description description of the task.
+     * @param deadline date by which the task is due.
+     */
     public DeadlineTask(String description, LocalDate deadline) {
         super(description);
         this.deadline = deadline;
@@ -13,7 +25,8 @@ public class DeadlineTask extends Task{
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + String.format(" (by: %s)", deadline.format(formatter)) ;
+        return "[D]" + super.toString()
+                + String.format(" (by: %s)", deadline.format(DISPLAY_DATE_FORMATTER));
     }
 
     @Override

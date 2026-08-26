@@ -5,11 +5,17 @@ import java.util.List;
 
 import neil.exception.NeilException;
 
+/**
+ * Stores and manages the ordered tasks in Neil.
+ */
 public class ToDoList {
-    private ArrayList<Task> tasks;
+    private final ArrayList<Task> tasks;
 
+    /**
+     * Creates an empty task list.
+     */
     public ToDoList() {
-        this.tasks = new ArrayList<>();
+        tasks = new ArrayList<>();
     }
 
     @Override
@@ -17,50 +23,81 @@ public class ToDoList {
         String output = "";
 
         int count = 1;
-        for (Task task : this.tasks) {
+        for (Task task : tasks) {
             output += String.format("%s.%s\n", count++, task);
         }
 
         return output;
     }
 
+    /**
+     * Adds a task to the end of this list.
+     *
+     * @param task task to add.
+     */
     public void add(Task task) {
-        this.tasks.add(task);
+        tasks.add(task);
     }
 
-    public Task remove(int id) throws NeilException{
-        if  (!this.taskExists(id)) {
-            throw new NeilException("The task " + id + " does not exist");
+    /**
+     * Removes the task with the specified one-based number.
+     *
+     * @param taskNumber one-based number of the task to remove.
+     * @return removed task.
+     * @throws NeilException if no task has the specified number.
+     */
+    public Task remove(int taskNumber) throws NeilException {
+        if (!taskExists(taskNumber)) {
+            throw new NeilException("The task " + taskNumber + " does not exist");
         }
-        return this.tasks.remove(id - 1);
+        return tasks.remove(taskNumber - 1);
     }
 
-    private boolean taskExists(int id) {
-        int idx = id - 1;
-        if (idx < 0 || idx >= tasks.size()) {
+    private boolean taskExists(int taskNumber) {
+        int taskIndex = taskNumber - 1;
+        if (taskIndex < 0 || taskIndex >= tasks.size()) {
             return false;
         }
-        return this.tasks.get(idx) != null;
+        return tasks.get(taskIndex) != null;
     }
 
-    public Task markTaskAsDone(int id) throws NeilException {
-        if  (!this.taskExists(id)) {
-            throw new NeilException("The task " + id + " does not exist");
+    /**
+     * Marks the task with the specified one-based number as completed.
+     *
+     * @param taskNumber one-based number of the task to mark.
+     * @return completed task.
+     * @throws NeilException if no task has the specified number.
+     */
+    public Task markTaskAsDone(int taskNumber) throws NeilException {
+        if (!taskExists(taskNumber)) {
+            throw new NeilException("The task " + taskNumber + " does not exist");
         }
-        this.tasks.get(id - 1).markAsDone();
-        return this.tasks.get(id - 1);
+        tasks.get(taskNumber - 1).markAsDone();
+        return tasks.get(taskNumber - 1);
     }
 
-    public Task unmarkTask(int id) throws NeilException {
-        if  (!this.taskExists(id)) {
-            throw new NeilException("The task " + id + " does not exist");
+    /**
+     * Marks the task with the specified one-based number as incomplete.
+     *
+     * @param taskNumber one-based number of the task to unmark.
+     * @return incomplete task.
+     * @throws NeilException if no task has the specified number.
+     */
+    public Task unmarkTask(int taskNumber) throws NeilException {
+        if (!taskExists(taskNumber)) {
+            throw new NeilException("The task " + taskNumber + " does not exist");
         }
-        this.tasks.get(id - 1).unmark();
-        return this.tasks.get(id - 1);
+        tasks.get(taskNumber - 1).unmark();
+        return tasks.get(taskNumber - 1);
     }
 
+    /**
+     * Returns the number of tasks in this list.
+     *
+     * @return number of tasks.
+     */
     public int size() {
-        return this.tasks.size();
+        return tasks.size();
     }
 
     public List<Task> getTasks() {
