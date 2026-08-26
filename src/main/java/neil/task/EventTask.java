@@ -1,17 +1,18 @@
 package neil.task;
 
 /**
- * Represents a task that takes place between a start and end time.
+ * Represents a task scheduled between a start and end time.
  */
 public class EventTask extends Task {
     private final String from;
     private final String to;
+
     /**
-     * Creates an incomplete event task with the specified time range.
+     * Creates an event task with the specified description and schedule.
      *
-     * @param description Description of the event.
-     * @param from Start time of the event.
-     * @param to End time of the event.
+     * @param description description of the task.
+     * @param from start time of the event.
+     * @param to end time of the event.
      */
     public EventTask(String description, String from, String to) {
         super(description);
@@ -21,7 +22,8 @@ public class EventTask extends Task {
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + String.format(" (from: %s to: %s)", this.from, this.to);
+        return "[E]" + super.toString()
+                + String.format(" (from: %s to: %s)", from, to);
     }
 
     @Override

@@ -15,7 +15,7 @@ public class Ui {
     private final Scanner scanner;
 
     /**
-     * Creates a user interface that reads commands from standard input.
+     * Creates a user interface that reads from standard input.
      */
     public Ui() {
         this.scanner = new Scanner(System.in);
@@ -24,7 +24,7 @@ public class Ui {
     /**
      * Returns the next command entered by the user.
      *
-     * @return Next line read from standard input.
+     * @return user command.
      */
     public String readCommand() {
         return scanner.nextLine();
@@ -61,7 +61,7 @@ public class Ui {
     /**
      * Displays an error message.
      *
-     * @param message Error message to display.
+     * @param message error message to display.
      */
     public void showError(String message) {
         System.out.println(message);
@@ -71,7 +71,7 @@ public class Ui {
     /**
      * Displays confirmation that a task was marked as completed.
      *
-     * @param task Task that was marked as completed.
+     * @param task task marked as completed.
      */
     public void showTaskMarked(Task task) {
         showMessage(String.format(
@@ -83,7 +83,7 @@ public class Ui {
     /**
      * Displays confirmation that a task was marked as incomplete.
      *
-     * @param task Task that was marked as incomplete.
+     * @param task task marked as incomplete.
      */
     public void showTaskUnmarked(Task task) {
         showMessage(String.format(
@@ -95,8 +95,8 @@ public class Ui {
     /**
      * Displays confirmation that a task was deleted.
      *
-     * @param task Task that was deleted.
-     * @param taskCount Number of tasks remaining in the list.
+     * @param task deleted task.
+     * @param taskCount number of tasks remaining.
      */
     public void showTaskDeleted(Task task, int taskCount) {
         showMessage(String.format(
@@ -108,9 +108,9 @@ public class Ui {
     }
 
     /**
-     * Displays all tasks in the specified list.
+     * Displays the tasks in the specified list.
      *
-     * @param toDoList Task list to display.
+     * @param toDoList task list to display.
      */
     public void showTaskList(ToDoList toDoList) {
         showMessage(String.format(
@@ -122,8 +122,8 @@ public class Ui {
     /**
      * Displays confirmation that a task was added.
      *
-     * @param task Task that was added.
-     * @param taskCount Number of tasks in the list.
+     * @param task added task.
+     * @param taskCount number of tasks in the list.
      */
     public void showTaskAdded(Task task, int taskCount) {
         showMessage(String.format(
@@ -140,7 +140,7 @@ public class Ui {
     }
 
     /**
-     * Closes the input scanner used by this user interface.
+     * Releases resources used to read user input.
      */
     public void close() {
         scanner.close();

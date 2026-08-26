@@ -1,13 +1,13 @@
 package neil.task;
 
 /**
- * Represents a task without an associated date or time.
+ * Represents a task without date or time information.
  */
 public class ToDoTask extends Task {
     /**
-     * Creates an incomplete todo task with the specified description.
+     * Creates a task with the specified description.
      *
-     * @param description Description of the task.
+     * @param description description of the task.
      */
     public ToDoTask(String description) {
         super(description);
@@ -26,5 +26,4 @@ public class ToDoTask extends Task {
                 description
         );
     }
-
 }

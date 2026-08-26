@@ -89,7 +89,7 @@ class ParserTest {
     /**
      * Verifies that invalid task input reports a domain-specific exception.
      *
-     * @param input invalid task command
+     * @param input invalid task command.
      */
     private void assertInvalidTaskInput(String input) {
         assertThrows(NeilException.class, () -> Parser.parseTask(input));
@@ -98,7 +98,7 @@ class ParserTest {
     /**
      * Verifies that invalid task-number input reports a domain-specific exception.
      *
-     * @param parts command words containing an invalid task number
+     * @param parts command words containing an invalid task number.
      */
     private void assertInvalidTaskNumber(String[] parts) {
         assertThrows(NeilException.class, () -> Parser.parseTaskNumber(parts));

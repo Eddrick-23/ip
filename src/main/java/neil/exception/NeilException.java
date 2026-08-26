@@ -1,13 +1,13 @@
 package neil.exception;
 
 /**
- * Represents an error that can be reported to a Neil user.
+ * Represents an error that can be shown to a Neil user.
  */
 public class NeilException extends Exception {
     /**
-     * Creates an exception with a message prefixed by the application name.
+     * Creates an exception with the specified user-facing message.
      *
-     * @param message Description of the error.
+     * @param message explanation of the error.
      */
     public NeilException(String message) {
         super("Neil: " + message);

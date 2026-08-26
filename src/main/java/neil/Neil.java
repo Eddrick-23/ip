@@ -8,7 +8,7 @@ import neil.task.ToDoList;
 import neil.ui.Ui;
 
 /**
- * Coordinates user interaction, task management, and persistent storage.
+ * Runs the Neil task-management application.
  */
 public class Neil {
     private final Storage storage;
@@ -16,9 +16,9 @@ public class Neil {
     private final ToDoList toDoList;
 
     /**
-     * Creates a Neil application that stores tasks at the specified file path.
+     * Creates the application using the specified storage file.
      *
-     * @param filePath Path of the file used to store tasks.
+     * @param filePath path to the task storage file.
      */
     public Neil(String filePath) {
         this.storage = new Storage(filePath);
@@ -27,7 +27,7 @@ public class Neil {
     }
 
     /**
-     * Runs the application until the user enters the {@code bye} command.
+     * Starts the command-processing loop.
      */
     public void run() {
         try {
@@ -59,7 +59,7 @@ public class Neil {
                     }
                     case "unmark": {
                         int taskNumber = Parser.parseTaskNumber(parts);
-                        Task task= toDoList.unmarkTask(taskNumber);
+                        Task task = toDoList.unmarkTask(taskNumber);
                         storage.save(toDoList.getTasks());
                         ui.showTaskUnmarked(task);
                         break;
@@ -91,9 +91,9 @@ public class Neil {
     }
 
     /**
-     * Starts Neil using the default task storage file.
+     * Starts the application.
      *
-     * @param args Command-line arguments; unused.
+     * @param args command-line arguments.
      */
     public static void main(String[] args) {
         new Neil("data/neil.txt").run();

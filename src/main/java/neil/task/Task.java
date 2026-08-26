@@ -6,10 +6,10 @@ import java.time.format.DateTimeParseException;
 import neil.exception.NeilException;
 
 /**
- * Represents a task with a description and completion status.
+ * Represents a task that can be displayed and stored by Neil.
  */
 public abstract class Task {
-    /** Description of this task. */
+    /** Description displayed for this task. */
     protected String description;
     /** Whether this task has been completed. */
     protected boolean isDone;
@@ -17,7 +17,7 @@ public abstract class Task {
     /**
      * Creates an incomplete task with the specified description.
      *
-     * @param description Description of the task.
+     * @param description description of the task.
      */
     public Task(String description) {
         this.description = description;
@@ -25,39 +25,37 @@ public abstract class Task {
     }
 
     /**
-     * Returns the task in its persistent storage format.
+     * Returns a representation of this task suitable for persistent storage.
      *
-     * @return Encoded task data.
+     * @return encoded task data.
      */
     public abstract String encode();
 
-
     @Override
     public String toString() {
-        String s = String.format("[%s] %s", this.isDone ? "X" : " ", this.description);
-        return s;
+        return String.format("[%s] %s", isDone ? "X" : " ", description);
     }
 
     /**
      * Marks this task as completed.
      */
     public void markAsDone() {
-        this.isDone = true;
+        isDone = true;
     }
 
     /**
      * Marks this task as incomplete.
      */
     public void unmark() {
-        this.isDone = false;
+        isDone = false;
     }
 
     /**
      * Reconstructs a task from its stored representation.
      *
-     * @param line Encoded task data.
-     * @return Reconstructed task.
-     * @throws NeilException If the stored data is invalid.
+     * @param line encoded task data.
+     * @return reconstructed task.
+     * @throws NeilException if the stored data is invalid.
      */
     public static Task decode(String line) throws NeilException {
         String[] parts = line.split("\\s*\\|\\s*", -1);
