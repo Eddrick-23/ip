@@ -86,6 +86,17 @@ class ParserTest {
         assertInvalidTaskNumber(new String[] {"mark", "first"});
     }
 
+    @Test
+    void parseFindKeyword_keywordProvided_keywordReturned() throws NeilException {
+        assertEquals("read book", Parser.parseFindKeyword("  find   read book  "));
+    }
+
+    @Test
+    void parseFindKeyword_keywordMissing_exceptionThrown() {
+        assertThrows(NeilException.class, () -> Parser.parseFindKeyword("find"));
+        assertThrows(NeilException.class, () -> Parser.parseFindKeyword("find   "));
+    }
+
     /**
      * Verifies that invalid task input reports a domain-specific exception.
      *

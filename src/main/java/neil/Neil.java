@@ -75,6 +75,11 @@ public class Neil {
                         ui.showTaskList(toDoList);
                         break;
                     }
+                    case "find": {
+                        String keyword = Parser.parseFindKeyword(input);
+                        ui.showMatchingTasks(toDoList.findTasks(keyword));
+                        break;
+                    }
                     default:
                         Task task = Parser.parseTask(input);
                         toDoList.add(task);

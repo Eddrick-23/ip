@@ -123,4 +123,21 @@ public final class Parser {
 
         return taskNumber;
     }
+
+    /**
+     * Parses the keyword from a find command.
+     *
+     * @param input raw find command.
+     * @return keyword to search for.
+     * @throws NeilException if the command does not contain a keyword.
+     */
+    public static String parseFindKeyword(String input) throws NeilException {
+        String[] parts = input.trim().split("\\s+", 2);
+
+        if (parts.length < 2 || parts[1].isBlank()) {
+            throw new NeilException("Please provide a keyword to search for");
+        }
+
+        return parts[1].trim();
+    }
 }

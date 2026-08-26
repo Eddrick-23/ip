@@ -1,8 +1,10 @@
 package neil.task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -37,6 +39,22 @@ class TaskTest {
         task.unmark();
 
         assertEquals("[T][ ] read book", task.toString());
+    }
+
+    @Test
+    void hasKeyword_keywordInDescription_returnsTrue() {
+        Task task = new ToDoTask("Read library book");
+
+        assertTrue(task.hasKeyword("read"));
+        assertTrue(task.hasKeyword("BOOK"));
+        assertTrue(task.hasKeyword("library book"));
+    }
+
+    @Test
+    void hasKeyword_keywordNotInDescription_returnsFalse() {
+        Task task = new ToDoTask("read book");
+
+        assertFalse(task.hasKeyword("report"));
     }
 
     @Test

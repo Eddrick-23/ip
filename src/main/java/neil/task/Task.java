@@ -2,6 +2,7 @@ package neil.task;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Locale;
 
 import neil.exception.NeilException;
 
@@ -48,6 +49,17 @@ public abstract class Task {
      */
     public void unmark() {
         isDone = false;
+    }
+
+    /**
+     * Returns whether this task's description contains the specified keyword.
+     *
+     * @param keyword keyword to find in the description.
+     * @return true if the description contains the keyword, ignoring letter case.
+     */
+    public boolean hasKeyword(String keyword) {
+        return description.toLowerCase(Locale.ROOT)
+                .contains(keyword.toLowerCase(Locale.ROOT));
     }
 
     /**
