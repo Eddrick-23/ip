@@ -16,6 +16,11 @@ import neil.task.Task;
 public class Storage {
     private final Path filePath;
 
+    /**
+     * Creates a storage manager for the specified file.
+     *
+     * @param filePath Path of the file used to store tasks.
+     */
     public Storage(String filePath) {
         this.filePath = Path.of(filePath);
     }
@@ -23,8 +28,8 @@ public class Storage {
     /**
      * Saves all tasks to the configured file.
      *
-     * @param tasks tasks to save
-     * @throws NeilException if the file cannot be written
+     * @param tasks Tasks to save.
+     * @throws NeilException If the file cannot be written.
      */
     public void save(List<Task> tasks) throws NeilException {
         List<String> lines = new ArrayList<>();
@@ -50,8 +55,8 @@ public class Storage {
      * Loads tasks from the configured file.
      * Returns an empty list if the file does not exist yet.
      *
-     * @return tasks loaded from the file
-     * @throws NeilException if the file cannot be read or decoded
+     * @return Tasks loaded from the file.
+     * @throws NeilException If the file cannot be read or decoded.
      */
     public List<Task> load() throws NeilException {
         List<Task> tasks = new ArrayList<>();

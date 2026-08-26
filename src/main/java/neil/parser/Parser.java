@@ -21,6 +21,13 @@ public final class Parser {
         // Prevent construction of this utility class.
     }
 
+    /**
+     * Returns a task parsed from a task-creation command.
+     *
+     * @param input Task-creation command entered by the user.
+     * @return Task represented by the command.
+     * @throws NeilException If the command or its arguments are invalid.
+     */
     public static Task parseTask(String input) throws NeilException {
         // split to at most two parts
         // front is the command, remaining is the string to parse
@@ -97,6 +104,13 @@ public final class Parser {
         }
     }
 
+    /**
+     * Returns the positive task number specified by a command.
+     *
+     * @param parts Words in a command that requires a task number.
+     * @return Positive task number specified by the command.
+     * @throws NeilException If the command does not contain exactly one positive integer.
+     */
     public static int parseTaskNumber(String[] parts) throws NeilException {
         if (parts.length != 2) {
             throw new NeilException("Please specify a task number.");

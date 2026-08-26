@@ -5,15 +5,30 @@ import java.time.format.DateTimeParseException;
 
 import neil.exception.NeilException;
 
+/**
+ * Represents a task with a description and completion status.
+ */
 public abstract class Task {
+    /** Description of this task. */
     protected String description;
+    /** Whether this task has been completed. */
     protected boolean isDone;
 
+    /**
+     * Creates an incomplete task with the specified description.
+     *
+     * @param description Description of the task.
+     */
     public Task(String description) {
         this.description = description;
         this.isDone = false;
     }
 
+    /**
+     * Returns the task in its persistent storage format.
+     *
+     * @return Encoded task data.
+     */
     public abstract String encode();
 
 
@@ -23,10 +38,16 @@ public abstract class Task {
         return s;
     }
 
+    /**
+     * Marks this task as completed.
+     */
     public void markAsDone() {
         this.isDone = true;
     }
 
+    /**
+     * Marks this task as incomplete.
+     */
     public void unmark() {
         this.isDone = false;
     }
@@ -34,9 +55,9 @@ public abstract class Task {
     /**
      * Reconstructs a task from its stored representation.
      *
-     * @param line encoded task data
-     * @return the reconstructed task
-     * @throws NeilException if the stored data is invalid
+     * @param line Encoded task data.
+     * @return Reconstructed task.
+     * @throws NeilException If the stored data is invalid.
      */
     public static Task decode(String line) throws NeilException {
         String[] parts = line.split("\\s*\\|\\s*", -1);
