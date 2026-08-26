@@ -41,6 +41,11 @@ Maintain JUnit tests for approximately the top 50% highest-value methods, priori
 
 ## Git
 
+All future commits in this project MUST follow the project skill at
+`.codex/skills/seedu-git-standard/SKILL.md`. Before proposing, reviewing, or creating a commit,
+read and apply that skill. This requirement is mandatory unless the user explicitly gives
+conflicting instructions.
+
 Use lightweight tags unless the user requests an annotated tag.
 When proposing or creating a commit message, include enough detail to explain the rationale for the change.
 Do not commit or push unless explicitly asked.
