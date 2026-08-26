@@ -14,14 +14,25 @@ public class Ui {
 
     private final Scanner scanner;
 
+    /**
+     * Creates a user interface that reads commands from standard input.
+     */
     public Ui() {
         this.scanner = new Scanner(System.in);
     }
 
+    /**
+     * Returns the next command entered by the user.
+     *
+     * @return Next line read from standard input.
+     */
     public String readCommand() {
         return scanner.nextLine();
     }
 
+    /**
+     * Displays the welcome message.
+     */
     public void showWelcome() {
         String banner =
                 "#   #  #####  #####  #    \n"
@@ -38,17 +49,30 @@ public class Ui {
         System.out.println(DIVIDER);
     }
 
+    /**
+     * Displays the goodbye message.
+     */
     public void showGoodbye() {
         System.out.println(
                 "Bye. Hope to see you again soon!");
         System.out.println(DIVIDER);
     }
 
+    /**
+     * Displays an error message.
+     *
+     * @param message Error message to display.
+     */
     public void showError(String message) {
         System.out.println(message);
         System.out.println(DIVIDER);
     }
 
+    /**
+     * Displays confirmation that a task was marked as completed.
+     *
+     * @param task Task that was marked as completed.
+     */
     public void showTaskMarked(Task task) {
         showMessage(String.format(
                 "Nice! I've marked this task as done:\n%s",
@@ -56,6 +80,11 @@ public class Ui {
         ));
     }
 
+    /**
+     * Displays confirmation that a task was marked as incomplete.
+     *
+     * @param task Task that was marked as incomplete.
+     */
     public void showTaskUnmarked(Task task) {
         showMessage(String.format(
                 "OK, I've marked this task as not done yet:\n%s",
@@ -63,6 +92,12 @@ public class Ui {
         ));
     }
 
+    /**
+     * Displays confirmation that a task was deleted.
+     *
+     * @param task Task that was deleted.
+     * @param taskCount Number of tasks remaining in the list.
+     */
     public void showTaskDeleted(Task task, int taskCount) {
         showMessage(String.format(
                 "Noted. I've removed this task:\n%s\n"
@@ -72,6 +107,11 @@ public class Ui {
         ));
     }
 
+    /**
+     * Displays all tasks in the specified list.
+     *
+     * @param toDoList Task list to display.
+     */
     public void showTaskList(ToDoList toDoList) {
         showMessage(String.format(
                 "Here are the tasks in your list:\n%s",
@@ -79,6 +119,12 @@ public class Ui {
         ));
     }
 
+    /**
+     * Displays confirmation that a task was added.
+     *
+     * @param task Task that was added.
+     * @param taskCount Number of tasks in the list.
+     */
     public void showTaskAdded(Task task, int taskCount) {
         showMessage(String.format(
                 "Got it. I've added this task:\n%s\n"
@@ -93,6 +139,9 @@ public class Ui {
         System.out.println(DIVIDER);
     }
 
+    /**
+     * Closes the input scanner used by this user interface.
+     */
     public void close() {
         scanner.close();
     }
