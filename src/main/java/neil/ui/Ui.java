@@ -1,5 +1,6 @@
 package neil.ui;
 
+import java.util.List;
 import java.util.Scanner;
 
 import neil.task.Task;
@@ -117,6 +118,26 @@ public class Ui {
                 "Here are the tasks in your list:\n%s",
                 toDoList
         ));
+    }
+
+    /**
+     * Displays the tasks that match a find command.
+     *
+     * @param matchingTasks matching tasks to display.
+     */
+    public void showMatchingTasks(List<Task> matchingTasks) {
+        StringBuilder message = new StringBuilder(
+                "Here are the matching tasks in your list:");
+
+        for (int i = 0; i < matchingTasks.size(); i++) {
+            message.append(String.format(
+                    "\n%d.%s",
+                    i + 1,
+                    matchingTasks.get(i)
+            ));
+        }
+
+        showMessage(message.toString());
     }
 
     /**

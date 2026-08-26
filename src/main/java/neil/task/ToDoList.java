@@ -100,6 +100,29 @@ public class ToDoList {
         return tasks.size();
     }
 
+    /**
+     * Returns the tasks whose descriptions contain the specified keyword.
+     *
+     * @param keyword keyword to find in task descriptions.
+     * @return matching tasks in their original order.
+     */
+    public List<Task> findTasks(String keyword) {
+        List<Task> matchingTasks = new ArrayList<>();
+
+        for (Task task : tasks) {
+            if (task.hasKeyword(keyword)) {
+                matchingTasks.add(task);
+            }
+        }
+
+        return List.copyOf(matchingTasks);
+    }
+
+    /**
+     * Returns an unmodifiable snapshot of the tasks in this list.
+     *
+     * @return tasks in their original order.
+     */
     public List<Task> getTasks() {
         return List.copyOf(this.tasks);
     }

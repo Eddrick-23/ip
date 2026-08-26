@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -99,6 +100,31 @@ class ToDoListTest {
         assertEquals(List.of(task), tasks);
         assertThrows(UnsupportedOperationException.class,
                 () -> tasks.add(new ToDoTask("write report")));
+    }
+
+    @Test
+    void findTasks_multipleMatchingDescriptions_matchesReturnedInOrder() {
+        ToDoList taskList = new ToDoList();
+        Task firstMatch = new ToDoTask("read book");
+        Task nonMatch = new EventTask("attend meeting", "book shop", "library");
+        Task secondMatch = new DeadlineTask("return BOOK", LocalDate.of(2026, 8, 30));
+        taskList.add(firstMatch);
+        taskList.add(nonMatch);
+        taskList.add(secondMatch);
+
+        List<Task> matchingTasks = taskList.findTasks("book");
+
+        assertEquals(List.of(firstMatch, secondMatch), matchingTasks);
+        assertThrows(UnsupportedOperationException.class,
+                () -> matchingTasks.add(nonMatch));
+    }
+
+    @Test
+    void findTasks_noMatchingDescription_emptyListReturned() {
+        ToDoList taskList = new ToDoList();
+        taskList.add(new ToDoTask("read book"));
+
+        assertEquals(List.of(), taskList.findTasks("report"));
     }
 
     /**
