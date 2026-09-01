@@ -98,8 +98,7 @@ class ToDoListTest {
         List<Task> tasks = taskList.getTasks();
 
         assertEquals(List.of(task), tasks);
-        assertThrows(UnsupportedOperationException.class,
-                () -> tasks.add(new ToDoTask("write report")));
+        assertThrows(UnsupportedOperationException.class, () -> tasks.add(new ToDoTask("write report")));
     }
 
     @Test
@@ -115,8 +114,7 @@ class ToDoListTest {
         List<Task> matchingTasks = taskList.findTasks("book");
 
         assertEquals(List.of(firstMatch, secondMatch), matchingTasks);
-        assertThrows(UnsupportedOperationException.class,
-                () -> matchingTasks.add(nonMatch));
+        assertThrows(UnsupportedOperationException.class, () -> matchingTasks.add(nonMatch));
     }
 
     @Test
