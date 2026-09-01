@@ -1,40 +1,20 @@
 package neil.ui;
 
 import java.util.List;
-import java.util.Scanner;
 
 import neil.task.Task;
 import neil.task.ToDoList;
 
 /**
- * Handles input from and output to the user.
+ * Formats messages shown to the user.
  */
 public class Ui {
-    private static final String DIVIDER =
-            "____________________________________________________________";
-
-    private final Scanner scanner;
-
     /**
-     * Creates a user interface that reads from standard input.
-     */
-    public Ui() {
-        this.scanner = new Scanner(System.in);
-    }
-
-    /**
-     * Returns the next command entered by the user.
+     * Returns the welcome message.
      *
-     * @return user command.
+     * @return welcome message.
      */
-    public String readCommand() {
-        return scanner.nextLine();
-    }
-
-    /**
-     * Displays the welcome message.
-     */
-    public void showWelcome() {
+    public String showWelcome() {
         String banner =
                 "#   #  #####  #####  #    \n"
                         + "##  #  #        #    #    \n"
@@ -42,90 +22,90 @@ public class Ui {
                         + "#  ##  #        #    #    \n"
                         + "#   #  #####  #####  #####";
 
-        System.out.println(DIVIDER);
-        System.out.println(banner);
-        System.out.println();
-        System.out.println("Hello! I'm Neil.");
-        System.out.println("What can I do for you?");
-        System.out.println(DIVIDER);
+        return banner + "\n\nHello! I'm Neil.\nWhat can I do for you?";
     }
 
     /**
-     * Displays the goodbye message.
+     * Returns the goodbye message.
+     *
+     * @return goodbye message.
      */
-    public void showGoodbye() {
-        System.out.println(
-                "Bye. Hope to see you again soon!");
-        System.out.println(DIVIDER);
+    public String showGoodbye() {
+        return "Bye. Hope to see you again soon!";
     }
 
     /**
-     * Displays an error message.
+     * Returns an error message.
      *
      * @param message error message to display.
+     * @return error message.
      */
-    public void showError(String message) {
-        System.out.println(message);
-        System.out.println(DIVIDER);
+    public String showError(String message) {
+        return message;
     }
 
     /**
-     * Displays confirmation that a task was marked as completed.
+     * Returns confirmation that a task was marked as completed.
      *
      * @param task task marked as completed.
+     * @return task-marked confirmation.
      */
-    public void showTaskMarked(Task task) {
-        showMessage(String.format(
+    public String showTaskMarked(Task task) {
+        return String.format(
                 "Nice! I've marked this task as done:\n%s",
                 task
-        ));
+        );
     }
 
     /**
-     * Displays confirmation that a task was marked as incomplete.
+     * Returns confirmation that a task was marked as incomplete.
      *
      * @param task task marked as incomplete.
+     * @return task-unmarked confirmation.
      */
-    public void showTaskUnmarked(Task task) {
-        showMessage(String.format(
+    public String showTaskUnmarked(Task task) {
+        return String.format(
                 "OK, I've marked this task as not done yet:\n%s",
                 task
-        ));
+        );
     }
 
     /**
-     * Displays confirmation that a task was deleted.
+     * Returns confirmation that a task was deleted.
      *
      * @param task deleted task.
      * @param taskCount number of tasks remaining.
+     * @return task-deleted confirmation.
      */
-    public void showTaskDeleted(Task task, int taskCount) {
-        showMessage(String.format(
+    public String showTaskDeleted(Task task, int taskCount) {
+        return String.format(
                 "Noted. I've removed this task:\n%s\n"
                         + "Now you have %d tasks in this list.",
                 task,
                 taskCount
-        ));
+        );
     }
 
     /**
-     * Displays the tasks in the specified list.
+     * Returns the tasks in the specified list.
      *
      * @param toDoList task list to display.
+     * @return numbered task list message.
      */
-    public void showTaskList(ToDoList toDoList) {
-        showMessage(String.format(
+    public String showTaskList(ToDoList toDoList) {
+        return String.format(
                 "Here are the tasks in your list:\n%s",
                 toDoList
-        ));
+        );
     }
 
     /**
-     * Displays the tasks that match a find command.
+     * Returns the tasks that match a find command.
      *
      * @param matchingTasks matching tasks to display.
+     * @return numbered matching-task message.
      */
-    public void showMatchingTasks(List<Task> matchingTasks) {
+    public String showMatchingTasks(List<Task> matchingTasks) {
         StringBuilder message = new StringBuilder(
                 "Here are the matching tasks in your list:");
 
@@ -137,33 +117,22 @@ public class Ui {
             ));
         }
 
-        showMessage(message.toString());
+        return message.toString();
     }
 
     /**
-     * Displays confirmation that a task was added.
+     * Returns confirmation that a task was added.
      *
      * @param task added task.
      * @param taskCount number of tasks in the list.
+     * @return task-added confirmation.
      */
-    public void showTaskAdded(Task task, int taskCount) {
-        showMessage(String.format(
+    public String showTaskAdded(Task task, int taskCount) {
+        return String.format(
                 "Got it. I've added this task:\n%s\n"
                         + "Now you have %d tasks in the list.",
                 task,
                 taskCount
-        ));
-    }
-
-    private void showMessage(String message) {
-        System.out.println(message);
-        System.out.println(DIVIDER);
-    }
-
-    /**
-     * Releases resources used to read user input.
-     */
-    public void close() {
-        scanner.close();
+        );
     }
 }
