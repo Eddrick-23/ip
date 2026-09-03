@@ -23,6 +23,8 @@ public class DialogBox extends HBox {
     private Label dialog;
     @FXML
     private Label displayPicture;
+    @FXML
+    private Label welcomeBanner;
 
     private DialogBox(String text, String placeholder) {
         try {
@@ -43,6 +45,18 @@ public class DialogBox extends HBox {
         Collections.reverse(children);
         getChildren().setAll(children);
         setAlignment(Pos.TOP_LEFT);
+    }
+
+    private void formatWelcomeMessage() {
+        String[] welcomeParts = dialog.getText().split("\\n\\n", 2);
+        if (welcomeParts.length != 2) {
+            return;
+        }
+
+        welcomeBanner.setText(welcomeParts[0]);
+        welcomeBanner.setManaged(true);
+        welcomeBanner.setVisible(true);
+        dialog.setText(welcomeParts[1]);
     }
 
     /**
@@ -67,6 +81,18 @@ public class DialogBox extends HBox {
         DialogBox dialogBox = new DialogBox(text, NEIL_PLACEHOLDER);
         dialogBox.flip();
         dialogBox.getStyleClass().add("neil-dialog");
+        return dialogBox;
+    }
+
+    /**
+     * Returns a Neil dialog with a monospaced banner and regular greeting text.
+     *
+     * @param text welcome message containing the banner and greeting.
+     * @return Neil welcome dialog box.
+     */
+    public static DialogBox getNeilWelcomeDialog(String text) {
+        DialogBox dialogBox = getNeilDialog(text);
+        dialogBox.formatWelcomeMessage();
         return dialogBox;
     }
 }

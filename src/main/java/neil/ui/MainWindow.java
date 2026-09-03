@@ -35,7 +35,7 @@ public class MainWindow {
      */
     public void setNeil(Neil neil) {
         this.neil = neil;
-        dialogContainer.getChildren().add(DialogBox.getNeilDialog(neil.getWelcomeMessage()));
+        dialogContainer.getChildren().add(DialogBox.getNeilWelcomeDialog(neil.getWelcomeMessage()));
     }
 
     @FXML

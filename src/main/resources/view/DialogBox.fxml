@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <fx:root alignment="TOP_RIGHT"
          maxWidth="1.7976931348623157E308"
@@ -11,12 +12,21 @@
          xmlns="http://javafx.com/javafx/25"
          xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label fx:id="dialog"
-               maxWidth="310.0"
-               minHeight="-Infinity"
-               styleClass="dialog-label"
-               text="Message"
-               wrapText="true" />
+        <VBox maxWidth="310.0" spacing="8.0" styleClass="dialog-content">
+            <children>
+                <Label fx:id="welcomeBanner"
+                       managed="false"
+                       minHeight="-Infinity"
+                       styleClass="welcome-banner"
+                       text="Banner"
+                       visible="false" />
+                <Label fx:id="dialog"
+                       maxWidth="282.0"
+                       minHeight="-Infinity"
+                       text="Message"
+                       wrapText="true" />
+            </children>
+        </VBox>
         <Label fx:id="displayPicture"
                alignment="CENTER"
                minHeight="44.0"

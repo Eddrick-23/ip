@@ -14,21 +14,29 @@
     -fx-padding: 6px 0 6px 0;
 }
 
-.dialog-label {
+.dialog-content {
     -fx-background-radius: 14px;
     -fx-padding: 10px 14px 10px 14px;
 }
 
-.user-dialog .dialog-label {
+.user-dialog .dialog-content {
     -fx-background-color: #2f6fed;
     -fx-text-fill: white;
 }
 
-.neil-dialog .dialog-label {
+.user-dialog .dialog-content .label {
+    -fx-text-fill: white;
+}
+
+.neil-dialog .dialog-content {
     -fx-background-color: white;
     -fx-border-color: #dfe5ee;
     -fx-border-radius: 14px;
     -fx-text-fill: #172033;
+}
+
+.welcome-banner {
+    -fx-font-family: "Monospaced";
 }
 
 .avatar-placeholder {
