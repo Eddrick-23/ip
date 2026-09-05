@@ -94,6 +94,7 @@ public final class Parser {
                 );
 
             default:
+                assert false : "Unhandled validated task command: " + command;
                 throw new NeilException("Unknown Task type");
         }
     }
