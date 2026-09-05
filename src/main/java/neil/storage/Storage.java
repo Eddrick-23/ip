@@ -32,11 +32,9 @@ public class Storage {
      * @throws NeilException if the file cannot be written.
      */
     public void save(List<Task> tasks) throws NeilException {
-        List<String> lines = new ArrayList<>();
-
-        for (Task task : tasks) {
-            lines.add(task.encode());
-        }
+        List<String> lines = tasks.stream()
+                .map(Task::encode)
+                .toList();
 
         try {
             Path parentDirectory = filePath.getParent();
