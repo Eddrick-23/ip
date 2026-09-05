@@ -51,52 +51,50 @@ public final class Parser {
             case "todo":
                 return new ToDoTask(arguments);
             case "deadline":
-                String[] deadlineParts =
-                        arguments.split("\\s+/by\\s+", 2);
-                if (deadlineParts.length != 2
-                        || deadlineParts[0].isBlank()
-                        || deadlineParts[1].isBlank()) {
-                    throw new NeilException(
-                            "Use: deadline DESCRIPTION /by DATE");
-                }
-                try {
-                    LocalDate deadline = LocalDate.parse(deadlineParts[1]);
-                    return new DeadlineTask(deadlineParts[0], deadline);
-                } catch (DateTimeParseException e) {
-                    throw new NeilException(
-                            "Please provide a valid date in yyyy-MM-dd format");
-                }
-
+                return parseDeadlineTask(arguments);
             case "event":
-                String[] fromParts =
-                        arguments.split("\\s+/from\\s+", 2);
-
-                if (fromParts.length != 2) {
-                    throw new NeilException(
-                            "Use: event DESCRIPTION /from START /to END");
-                }
-
-                String[] toParts =
-                        fromParts[1].split("\\s+/to\\s+", 2);
-
-                if (toParts.length != 2
-                        || fromParts[0].isBlank()
-                        || toParts[0].isBlank()
-                        || toParts[1].isBlank()) {
-                    throw new NeilException(
-                            "Use: event DESCRIPTION /from START /to END");
-                }
-
-                return new EventTask(
-                        fromParts[0].trim(),
-                        toParts[0].trim(),
-                        toParts[1].trim()
-                );
-
+                return parseEventTask(arguments);
             default:
                 assert false : "Unhandled validated task command: " + command;
                 throw new NeilException("Unknown Task type");
         }
+    }
+
+    private static DeadlineTask parseDeadlineTask(String arguments) throws NeilException {
+        String[] deadlineParts = arguments.split("\\s+/by\\s+", 2);
+        if (deadlineParts.length != 2
+                || deadlineParts[0].isBlank()
+                || deadlineParts[1].isBlank()) {
+            throw new NeilException("Use: deadline DESCRIPTION /by DATE");
+        }
+
+        try {
+            LocalDate deadline = LocalDate.parse(deadlineParts[1]);
+            return new DeadlineTask(deadlineParts[0], deadline);
+        } catch (DateTimeParseException e) {
+            throw new NeilException("Please provide a valid date in yyyy-MM-dd format");
+        }
+    }
+
+    private static EventTask parseEventTask(String arguments) throws NeilException {
+        String[] fromParts = arguments.split("\\s+/from\\s+", 2);
+        if (fromParts.length != 2) {
+            throw new NeilException("Use: event DESCRIPTION /from START /to END");
+        }
+
+        String[] toParts = fromParts[1].split("\\s+/to\\s+", 2);
+        if (toParts.length != 2
+                || fromParts[0].isBlank()
+                || toParts[0].isBlank()
+                || toParts[1].isBlank()) {
+            throw new NeilException("Use: event DESCRIPTION /from START /to END");
+        }
+
+        return new EventTask(
+                fromParts[0].trim(),
+                toParts[0].trim(),
+                toParts[1].trim()
+        );
     }
 
     /**
