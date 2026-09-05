@@ -84,67 +84,74 @@ public abstract class Task {
             throw new NeilException("Saved task has no description: " + line);
         }
 
-        boolean isDone;
-
-        if (status.equals("1")) {
-            isDone = true;
-        } else if (status.equals("0")) {
-            isDone = false;
-        } else {
-            throw new NeilException("Invalid saved task status: " + line);
-        }
-
-        Task task;
-
-        switch (type) {
-            case "T":
-                if (parts.length != 3) {
-                    throw new NeilException("Invalid saved todo: " + line);
-                }
-
-                task = new ToDoTask(description);
-                break;
-
-            case "D":
-                if (parts.length != 4 || parts[3].isBlank()) {
-                    throw new NeilException("Invalid saved deadline: " + line);
-                }
-
-                try {
-                    LocalDate deadline = LocalDate.parse(parts[3]);
-
-                    task = new DeadlineTask(
-                            description,
-                            deadline
-                    );
-                } catch (DateTimeParseException e) {
-                    throw new NeilException(
-                            "Invalid saved deadline date: " + line);
-                }
-                break;
-
-            case "E":
-                if (parts.length != 5
-                        || parts[3].isBlank()
-                        || parts[4].isBlank()) {
-                    throw new NeilException("Invalid saved event: " + line);
-                }
-
-                task = new EventTask(
-                        description,
-                        parts[3],
-                        parts[4]
-                );
-                break;
-
-            default:
-                throw new NeilException("Unknown saved task type: " + type);
-        }
+        boolean isDone = parseDoneStatus(status, line);
+        Task task = decodeTaskByType(type, description, parts, line);
 
         if (isDone) {
             task.markAsDone();
         }
 
         return task;
+    }
+
+    private static boolean parseDoneStatus(String status, String line) throws NeilException {
+        if (status.equals("1")) {
+            return true;
+        }
+
+        if (status.equals("0")) {
+            return false;
+        }
+
+        throw new NeilException("Invalid saved task status: " + line);
+    }
+
+    private static Task decodeTaskByType(String type, String description, String[] parts, String line)
+            throws NeilException {
+        switch (type) {
+            case "T":
+                return decodeTodoTask(description, parts, line);
+            case "D":
+                return decodeDeadlineTask(description, parts, line);
+            case "E":
+                return decodeEventTask(description, parts, line);
+            default:
+                throw new NeilException("Unknown saved task type: " + type);
+        }
+    }
+
+    private static Task decodeTodoTask(String description, String[] parts, String line) throws NeilException {
+        if (parts.length != 3) {
+            throw new NeilException("Invalid saved todo: " + line);
+        }
+
+        return new ToDoTask(description);
+    }
+
+    private static Task decodeDeadlineTask(String description, String[] parts, String line) throws NeilException {
+        if (parts.length != 4 || parts[3].isBlank()) {
+            throw new NeilException("Invalid saved deadline: " + line);
+        }
+
+        try {
+            LocalDate deadline = LocalDate.parse(parts[3]);
+            return new DeadlineTask(description, deadline);
+        } catch (DateTimeParseException e) {
+            throw new NeilException("Invalid saved deadline date: " + line);
+        }
+    }
+
+    private static Task decodeEventTask(String description, String[] parts, String line) throws NeilException {
+        if (parts.length != 5
+                || parts[3].isBlank()
+                || parts[4].isBlank()) {
+            throw new NeilException("Invalid saved event: " + line);
+        }
+
+        return new EventTask(
+                description,
+                parts[3],
+                parts[4]
+        );
     }
 }
