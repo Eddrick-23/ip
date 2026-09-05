@@ -27,6 +27,13 @@ class ToDoListTest {
     }
 
     @Test
+    void add_nullTask_assertionErrorThrown() {
+        ToDoList taskList = new ToDoList();
+
+        assertThrows(AssertionError.class, () -> taskList.add(null));
+    }
+
+    @Test
     void remove_existingTask_taskRemovedAndReturned() throws NeilException {
         ToDoList taskList = new ToDoList();
         Task firstTask = new ToDoTask("read book");

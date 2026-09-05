@@ -25,6 +25,11 @@ public class MainWindow {
 
     @FXML
     private void initialize() {
+        assert scrollPane != null : "FXML must inject scrollPane";
+        assert dialogContainer != null : "FXML must inject dialogContainer";
+        assert userInput != null : "FXML must inject userInput";
+        assert sendButton != null : "FXML must inject sendButton";
+
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
@@ -40,6 +45,8 @@ public class MainWindow {
 
     @FXML
     private void handleUserInput() {
+        assert neil != null : "setNeil must be called before handling user input";
+
         String input = userInput.getText();
         String response = neil.getResponse(input);
 
