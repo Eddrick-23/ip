@@ -132,6 +132,12 @@ class TaskTest {
     }
 
     @Test
+    void decode_deadlineOrEventWithExtraField_exceptionThrown() {
+        assertInvalidSavedTask("D | 0 | return book | 2026-08-25 | extra");
+        assertInvalidSavedTask("E | 0 | team meeting | Monday 2pm | Monday 4pm | extra");
+    }
+
+    @Test
     void decode_eventWithMissingOrBlankTime_exceptionThrown() {
         assertInvalidSavedTask("E | 0 | team meeting | Monday 2pm");
         assertInvalidSavedTask("E | 0 | team meeting |  | Monday 4pm");
