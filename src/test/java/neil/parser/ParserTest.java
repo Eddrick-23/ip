@@ -26,16 +26,16 @@ class ParserTest {
     }
 
     @Test
-    void parseTask_deadlineCommand_deadlineTaskCreated() throws NeilException {
-        Task task = Parser.parseTask("deadline return book /by 2026-08-25");
+    void parseTask_deadlineCommandWithExtraWhitespace_deadlineTaskCreated() throws NeilException {
+        Task task = Parser.parseTask("  deadline   return book   /by   2026-08-25  ");
 
         assertInstanceOf(DeadlineTask.class, task);
         assertEquals("D | 0 | return book | 2026-08-25", task.encode());
     }
 
     @Test
-    void parseTask_eventCommand_eventTaskCreated() throws NeilException {
-        Task task = Parser.parseTask("event team meeting /from Monday 2pm /to Monday 4pm");
+    void parseTask_eventCommandWithExtraWhitespace_eventTaskCreated() throws NeilException {
+        Task task = Parser.parseTask("  event   team meeting   /from   Monday 2pm   /to   Monday 4pm  ");
 
         assertInstanceOf(EventTask.class, task);
         assertEquals("E | 0 | team meeting | Monday 2pm | Monday 4pm", task.encode());
