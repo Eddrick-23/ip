@@ -108,15 +108,9 @@ public class ToDoList {
      * @return matching tasks in their original order.
      */
     public List<Task> findTasks(String keyword) {
-        List<Task> matchingTasks = new ArrayList<>();
-
-        for (Task task : tasks) {
-            if (task.hasKeyword(keyword)) {
-                matchingTasks.add(task);
-            }
-        }
-
-        return List.copyOf(matchingTasks);
+        return tasks.stream()
+                .filter(task -> task.hasKeyword(keyword))
+                .toList();
     }
 
     /**
