@@ -36,6 +36,10 @@ public class DialogBox extends HBox {
             throw new IllegalStateException("Unable to load the dialog box view", e);
         }
 
+        assert dialog != null : "FXML must inject dialog";
+        assert displayPicture != null : "FXML must inject displayPicture";
+        assert welcomeBanner != null : "FXML must inject welcomeBanner";
+
         dialog.setText(text);
         displayPicture.setText(placeholder);
     }
