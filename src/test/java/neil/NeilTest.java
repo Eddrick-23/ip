@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -36,7 +37,7 @@ class NeilTest {
                 "Here are the matching tasks in your list:\n1.[T][X] read book",
                 neil.getResponse("find BOOK")
         );
-        assertEquals("T | 1 | read book\n", Files.readString(storageFile));
+        assertEquals(List.of("T | 1 | read book"), Files.readAllLines(storageFile));
     }
 
     @Test
