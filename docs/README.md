@@ -28,3 +28,9 @@ expected output
 ## Feature XYZ
 
 // Feature details
+
+## Viewing help
+
+Enter `help` to display the available commands, what they do, and examples of their expected formats.
+
+Example: `help`

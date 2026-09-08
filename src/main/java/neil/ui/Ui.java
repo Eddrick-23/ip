@@ -22,7 +22,66 @@ public class Ui {
                         + "#  ##  #        #    #    \n"
                         + "#   #  #####  #####  #####";
 
-        return banner + "\n\nHello! I'm Neil.\nWhat can I do for you?";
+        return banner + "\n\nHello! I'm Neil.\nWhat can I do for you?\n"
+                + "Type \"help\" to see available commands.";
+    }
+
+    /**
+     * Returns guidance for using Neil's commands.
+     *
+     * @return command descriptions and examples.
+     */
+    public String showHelp() {
+        return "AVAILABLE COMMANDS\n"
+                + "==================\n"
+                + "\n"
+                + "ADD TASKS\n"
+                + "---------\n"
+                + "\n"
+                + "todo DESCRIPTION\n"
+                + "  Adds a todo task.\n"
+                + "  Example: todo read book\n"
+                + "\n"
+                + "deadline DESCRIPTION /by YYYY-MM-DD\n"
+                + "  Adds a deadline task.\n"
+                + "  Example: deadline return book /by 2026-09-15\n"
+                + "\n"
+                + "event DESCRIPTION /from START /to END\n"
+                + "  Adds an event task.\n"
+                + "  Example: event meeting /from 2pm /to 3pm\n"
+                + "\n"
+                + "MANAGE TASKS\n"
+                + "------------\n"
+                + "\n"
+                + "list\n"
+                + "  Shows all tasks.\n"
+                + "\n"
+                + "mark NUMBER\n"
+                + "  Marks a task as done.\n"
+                + "  Example: mark 1\n"
+                + "\n"
+                + "unmark NUMBER\n"
+                + "  Marks a task as not done.\n"
+                + "  Example: unmark 1\n"
+                + "\n"
+                + "delete NUMBER\n"
+                + "  Deletes a task.\n"
+                + "  Example: delete 1\n"
+                + "\n"
+                + "find KEYWORD\n"
+                + "  Finds matching tasks.\n"
+                + "  Example: find book\n"
+                + "\n"
+                + "OTHER\n"
+                + "-----\n"
+                + "\n"
+                + "help\n"
+                + "  Shows this help message.\n"
+                + "\n"
+                + "bye\n"
+                + "  Exits Neil.\n"
+                + "\n"
+                + "NUMBER is the task number shown by list.";
     }
 
     /**

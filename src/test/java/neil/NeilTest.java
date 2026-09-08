@@ -12,6 +12,8 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import neil.ui.Ui;
+
 /**
  * Tests for processing complete user-command workflows.
  */
@@ -51,6 +53,33 @@ class NeilTest {
                 "Here are the tasks in your list:\n1.[T][ ] read book\n",
                 neil.getResponse("list")
         );
+    }
+
+    @Test
+    void getResponse_helpCommand_helpReturnedWithoutChangingStorage() throws IOException {
+        Path storageFile = temporaryDirectory.resolve("tasks.txt");
+        Files.writeString(storageFile, "T | 0 | read book\n");
+        Neil neil = new Neil(storageFile.toString());
+
+        assertEquals(new Ui().showHelp(), neil.getResponse("  help  "));
+        assertEquals(List.of("T | 0 | read book"), Files.readAllLines(storageFile));
+    }
+
+    @Test
+    void getResponse_helpCommandAfterStorageError_helpReturned() throws IOException {
+        Path storageDirectory = temporaryDirectory.resolve("tasks");
+        Files.createDirectory(storageDirectory);
+        Neil neil = new Neil(storageDirectory.toString());
+
+        assertEquals(new Ui().showHelp(), neil.getResponse("help"));
+    }
+
+    @Test
+    void getResponse_invalidHelpCommand_errorReturned() {
+        Neil neil = new Neil(temporaryDirectory.resolve("tasks.txt").toString());
+
+        assertEquals("Neil: command HELP not supported", neil.getResponse("HELP"));
+        assertEquals("Neil: Use: help", neil.getResponse("help deadline"));
     }
 
     @Test

@@ -61,12 +61,19 @@ public class Neil {
             return ui.showGoodbye();
         }
 
-        if (startupErrorMessage != null) {
-            return startupErrorMessage;
-        }
-
         String[] parts = input.trim().split("\\s+");
         try {
+            if (parts[0].equals("help")) {
+                if (parts.length != 1) {
+                    throw new NeilException("Use: help");
+                }
+                return ui.showHelp();
+            }
+
+            if (startupErrorMessage != null) {
+                return startupErrorMessage;
+            }
+
             switch (parts[0]) {
                 case "mark": {
                     int taskNumber = Parser.parseTaskNumber(parts);
