@@ -43,6 +43,68 @@ class NeilTest {
     }
 
     @Test
+    void getResponse_unmarkCommand_taskAndPersistenceUpdated() throws IOException {
+        Path storageFile = temporaryDirectory.resolve("tasks.txt");
+        Files.writeString(storageFile, "T | 1 | read book\n");
+        Neil neil = new Neil(storageFile.toString());
+
+        CommandResult response = neil.getResponse("unmark 1");
+
+        assertEquals(
+                "OK, I've marked this task as not done yet:\n[T][ ] read book",
+                response.message());
+        assertFalse(response.isError());
+        assertEquals(List.of("T | 0 | read book"), Files.readAllLines(storageFile));
+    }
+
+    @Test
+    void getResponse_deleteMiddleTask_taskRemovedAndRemainingTasksRenumbered() throws IOException {
+        Path storageFile = temporaryDirectory.resolve("tasks.txt");
+        Files.writeString(
+                storageFile,
+                "T | 0 | first task\nT | 0 | second task\nT | 0 | third task\n");
+        Neil neil = new Neil(storageFile.toString());
+
+        CommandResult response = neil.getResponse("delete 2");
+
+        assertEquals(
+                "Noted. I've removed this task:\n[T][ ] second task\n"
+                        + "Now you have 2 tasks in this list.",
+                response.message());
+        assertEquals(
+                "Here are the tasks in your list:\n"
+                        + "1.[T][ ] first task\n"
+                        + "2.[T][ ] third task\n",
+                neil.getResponse("list").message());
+        assertEquals(
+                List.of("T | 0 | first task", "T | 0 | third task"),
+                Files.readAllLines(storageFile));
+    }
+
+    @Test
+    void getResponse_invalidTaskNumbers_errorsReturnedWithoutChangingTasks() throws IOException {
+        Path storageFile = temporaryDirectory.resolve("tasks.txt");
+        List<String> originalLines = List.of("T | 0 | read book");
+        Files.write(storageFile, originalLines);
+        Neil neil = new Neil(storageFile.toString());
+
+        CommandResult zeroResponse = neil.getResponse("mark 0");
+        CommandResult missingResponse = neil.getResponse("unmark 2");
+        CommandResult nonNumericResponse = neil.getResponse("delete first");
+
+        assertEquals("Neil: The task number must be a positive integer", zeroResponse.message());
+        assertEquals("Neil: The task 2 does not exist", missingResponse.message());
+        assertEquals("Neil: The task number must be a positive integer", nonNumericResponse.message());
+        assertTrue(zeroResponse.isError());
+        assertTrue(missingResponse.isError());
+        assertTrue(nonNumericResponse.isError());
+        assertEquals(originalLines, Files.readAllLines(storageFile));
+        assertEquals(
+                "Here are the tasks in your list:\n1.[T][ ] read book\n",
+                neil.getResponse("list").message());
+    }
+
+    @Test
     void constructor_savedTasksExist_tasksAvailableToCommands() throws IOException {
         Path storageFile = temporaryDirectory.resolve("tasks.txt");
         Files.writeString(storageFile, "T | 0 | read book\n");
@@ -85,6 +147,18 @@ class NeilTest {
         Neil neil = new Neil(storageDirectory.toString());
 
         assertTrue(neil.getWelcomeResponse().isError());
+    }
+
+    @Test
+    void getResponse_commandAfterStorageError_startupErrorReturned() throws IOException {
+        Path storageDirectory = temporaryDirectory.resolve("tasks");
+        Files.createDirectory(storageDirectory);
+        Neil neil = new Neil(storageDirectory.toString());
+
+        CommandResult response = neil.getResponse("list");
+
+        assertEquals(neil.getWelcomeResponse(), response);
+        assertTrue(response.isError());
     }
 
     @Test
