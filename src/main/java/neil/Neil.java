@@ -67,7 +67,7 @@ public class Neil {
                 if (parts.length != 1) {
                     throw new NeilException("Use: help");
                 }
-                return CommandResult.normal(ui.showHelp());
+                return CommandResult.help(ui.showHelp());
             }
 
             if (startupError != null) {

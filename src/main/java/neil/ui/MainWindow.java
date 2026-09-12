@@ -61,9 +61,7 @@ public class MainWindow {
         }
 
         CommandResult response = neil.getResponse(input);
-        DialogBox responseDialog = response.isError()
-                ? DialogBox.getNeilErrorDialog(response.message())
-                : DialogBox.getNeilDialog(response.message());
+        DialogBox responseDialog = createResponseDialog(response);
 
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input),
@@ -74,5 +72,15 @@ public class MainWindow {
         if (neil.isExitCommand(input)) {
             Platform.exit();
         }
+    }
+
+    private DialogBox createResponseDialog(CommandResult response) {
+        if (response.isError()) {
+            return DialogBox.getNeilErrorDialog(response.message());
+        }
+        if (response.isHelp()) {
+            return DialogBox.getNeilHelpDialog(response.message());
+        }
+        return DialogBox.getNeilDialog(response.message());
     }
 }

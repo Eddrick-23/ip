@@ -56,6 +56,22 @@
     -fx-font-weight: bold;
 }
 
+.help-scroll-pane,
+.help-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.help-scroll-pane {
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.help-table {
+    -fx-font-family: "Monospaced";
+    -fx-font-size: 12px;
+    -fx-text-fill: #172033;
+}
+
 .welcome-banner {
     -fx-font-family: "Monospaced";
 }

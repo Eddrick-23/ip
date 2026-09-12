@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -29,6 +30,10 @@ public class DialogBox extends HBox {
     @FXML
     private Label errorTitle;
     @FXML
+    private Label helpTable;
+    @FXML
+    private ScrollPane helpScrollPane;
+    @FXML
     private Label welcomeBanner;
     @FXML
     private VBox dialogContent;
@@ -46,6 +51,8 @@ public class DialogBox extends HBox {
         assert dialog != null : "FXML must inject dialog";
         assert displayPicture != null : "FXML must inject displayPicture";
         assert errorTitle != null : "FXML must inject errorTitle";
+        assert helpTable != null : "FXML must inject helpTable";
+        assert helpScrollPane != null : "FXML must inject helpScrollPane";
         assert welcomeBanner != null : "FXML must inject welcomeBanner";
         assert dialogContent != null : "FXML must inject dialogContent";
 
@@ -86,6 +93,14 @@ public class DialogBox extends HBox {
         errorTitle.setVisible(true);
     }
 
+    private void formatHelpMessage() {
+        helpTable.setText(dialog.getText());
+        helpScrollPane.setManaged(true);
+        helpScrollPane.setVisible(true);
+        dialog.setManaged(false);
+        dialog.setVisible(false);
+    }
+
     /**
      * Returns a right-aligned dialog containing a user message.
      *
@@ -112,6 +127,19 @@ public class DialogBox extends HBox {
         dialogBox.limitContentWidth(NEIL_CONTENT_WIDTH_RATIO);
         dialogBox.flip();
         dialogBox.getStyleClass().add("neil-dialog");
+        return dialogBox;
+    }
+
+    /**
+     * Returns a Neil dialog containing a horizontally scrollable help table.
+     *
+     * @param text formatted help table produced by Neil.
+     * @return Neil help dialog box.
+     */
+    public static DialogBox getNeilHelpDialog(String text) {
+        DialogBox dialogBox = getNeilDialog(text);
+        dialogBox.formatHelpMessage();
+        dialogBox.getStyleClass().add("help-dialog");
         return dialogBox;
     }
 

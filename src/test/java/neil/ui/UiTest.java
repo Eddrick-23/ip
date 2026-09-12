@@ -3,6 +3,7 @@ package neil.ui;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -25,57 +26,36 @@ class UiTest {
     void showHelp_helpRequested_commandsAndExamplesReturned() {
         Ui ui = new Ui();
 
-        String expectedOutput = "AVAILABLE COMMANDS\n"
-                + "==================\n"
-                + "\n"
-                + "ADD TASKS\n"
-                + "---------\n"
-                + "\n"
-                + "todo DESCRIPTION\n"
-                + "  Adds a todo task.\n"
-                + "  Example: todo read book\n"
-                + "\n"
-                + "deadline DESCRIPTION /by YYYY-MM-DD\n"
-                + "  Adds a deadline task.\n"
-                + "  Example: deadline return book /by 2026-09-15\n"
-                + "\n"
-                + "event DESCRIPTION /from START /to END\n"
-                + "  Adds an event task.\n"
-                + "  Example: event meeting /from 2pm /to 3pm\n"
-                + "\n"
-                + "MANAGE TASKS\n"
-                + "------------\n"
-                + "\n"
-                + "list\n"
-                + "  Shows all tasks.\n"
-                + "\n"
-                + "mark NUMBER\n"
-                + "  Marks a task as done.\n"
-                + "  Example: mark 1\n"
-                + "\n"
-                + "unmark NUMBER\n"
-                + "  Marks a task as not done.\n"
-                + "  Example: unmark 1\n"
-                + "\n"
-                + "delete NUMBER\n"
-                + "  Deletes a task.\n"
-                + "  Example: delete 1\n"
-                + "\n"
-                + "find KEYWORD\n"
-                + "  Finds matching tasks.\n"
-                + "  Example: find book\n"
-                + "\n"
-                + "OTHER\n"
-                + "-----\n"
-                + "\n"
-                + "help\n"
-                + "  Shows this help message.\n"
-                + "\n"
-                + "bye\n"
-                + "  Exits Neil.\n"
-                + "\n"
-                + "NUMBER is the task number shown by list.";
-        assertEquals(expectedOutput, ui.showHelp());
+        String[] lines = ui.showHelp().split("\n");
+        List<List<String>> rows = Arrays.stream(lines)
+                .skip(4)
+                .limit(10)
+                .map(UiTest::splitHelpRow)
+                .toList();
+
+        assertEquals("AVAILABLE COMMANDS", lines[0]);
+        assertEquals(List.of("COMMAND", "PURPOSE", "EXAMPLE"), splitHelpRow(lines[2]));
+        assertEquals(List.of(
+                List.of("todo DESCRIPTION", "Add a todo task.", "todo read book"),
+                List.of(
+                        "deadline DESCRIPTION /by YYYY-MM-DD",
+                        "Add a deadline task.",
+                        "deadline return book /by 2026-09-15"
+                ),
+                List.of(
+                        "event DESCRIPTION /from START /to END",
+                        "Add an event task.",
+                        "event meeting /from 2pm /to 3pm"
+                ),
+                List.of("list", "Show all tasks.", "list"),
+                List.of("mark NUMBER", "Mark a task as done.", "mark 1"),
+                List.of("unmark NUMBER", "Mark a task as not done.", "unmark 1"),
+                List.of("delete NUMBER", "Delete a task.", "delete 1"),
+                List.of("find KEYWORD", "Find matching tasks.", "find book"),
+                List.of("help", "Show this help table.", "help"),
+                List.of("bye", "Exit Neil.", "bye")
+        ), rows);
+        assertEquals("NUMBER is the task number shown by list.", lines[15]);
     }
 
     @Test
@@ -100,5 +80,9 @@ class UiTest {
         String message = ui.showMatchingTasks(List.of());
 
         assertEquals("Here are the matching tasks in your list:", message);
+    }
+
+    private static List<String> splitHelpRow(String row) {
+        return List.of(row.strip().split("\\s{2,}"));
     }
 }

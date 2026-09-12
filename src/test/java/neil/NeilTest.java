@@ -60,8 +60,10 @@ class NeilTest {
         Path storageFile = temporaryDirectory.resolve("tasks.txt");
         Files.writeString(storageFile, "T | 0 | read book\n");
         Neil neil = new Neil(storageFile.toString());
+        CommandResult response = neil.getResponse("  help  ");
 
-        assertEquals(new Ui().showHelp(), neil.getResponse("  help  ").message());
+        assertEquals(new Ui().showHelp(), response.message());
+        assertTrue(response.isHelp());
         assertEquals(List.of("T | 0 | read book"), Files.readAllLines(storageFile));
     }
 
@@ -70,8 +72,10 @@ class NeilTest {
         Path storageDirectory = temporaryDirectory.resolve("tasks");
         Files.createDirectory(storageDirectory);
         Neil neil = new Neil(storageDirectory.toString());
+        CommandResult response = neil.getResponse("help");
 
-        assertEquals(new Ui().showHelp(), neil.getResponse("help").message());
+        assertEquals(new Ui().showHelp(), response.message());
+        assertTrue(response.isHelp());
     }
 
     @Test

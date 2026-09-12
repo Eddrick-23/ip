@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
@@ -26,6 +27,23 @@
                        styleClass="error-title"
                        text="Error"
                        visible="false" />
+                <ScrollPane fx:id="helpScrollPane"
+                            fitToHeight="true"
+                            hbarPolicy="AS_NEEDED"
+                            managed="false"
+                            minHeight="-Infinity"
+                            pannable="true"
+                            styleClass="help-scroll-pane"
+                            vbarPolicy="NEVER"
+                            visible="false">
+                    <content>
+                        <Label fx:id="helpTable"
+                               minHeight="-Infinity"
+                               styleClass="help-table"
+                               text="Help"
+                               wrapText="false" />
+                    </content>
+                </ScrollPane>
                 <Label fx:id="dialog"
                        maxWidth="1.7976931348623157E308"
                        minHeight="-Infinity"
