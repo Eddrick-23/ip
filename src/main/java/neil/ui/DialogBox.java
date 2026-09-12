@@ -11,13 +11,15 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 /**
  * Represents one message and speaker placeholder in the chat window.
  */
 public class DialogBox extends HBox {
+    private static final double NEIL_CONTENT_WIDTH_RATIO = 0.86;
+    private static final double USER_CONTENT_WIDTH_RATIO = 0.70;
     private static final String NEIL_PLACEHOLDER = "N";
-    private static final String USER_PLACEHOLDER = "You";
 
     @FXML
     private Label dialog;
@@ -25,8 +27,10 @@ public class DialogBox extends HBox {
     private Label displayPicture;
     @FXML
     private Label welcomeBanner;
+    @FXML
+    private VBox dialogContent;
 
-    private DialogBox(String text, String placeholder) {
+    private DialogBox(String text) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(DialogBox.class.getResource("/view/DialogBox.fxml"));
             fxmlLoader.setController(this);
@@ -39,9 +43,18 @@ public class DialogBox extends HBox {
         assert dialog != null : "FXML must inject dialog";
         assert displayPicture != null : "FXML must inject displayPicture";
         assert welcomeBanner != null : "FXML must inject welcomeBanner";
+        assert dialogContent != null : "FXML must inject dialogContent";
 
         dialog.setText(text);
-        displayPicture.setText(placeholder);
+    }
+
+    private void limitContentWidth(double maximumWidthRatio) {
+        dialogContent.maxWidthProperty().bind(widthProperty().multiply(maximumWidthRatio));
+    }
+
+    private void hideDisplayPicture() {
+        displayPicture.setManaged(false);
+        displayPicture.setVisible(false);
     }
 
     private void flip() {
@@ -70,7 +83,9 @@ public class DialogBox extends HBox {
      * @return user dialog box.
      */
     public static DialogBox getUserDialog(String text) {
-        DialogBox dialogBox = new DialogBox(text, USER_PLACEHOLDER);
+        DialogBox dialogBox = new DialogBox(text);
+        dialogBox.hideDisplayPicture();
+        dialogBox.limitContentWidth(USER_CONTENT_WIDTH_RATIO);
         dialogBox.getStyleClass().add("user-dialog");
         return dialogBox;
     }
@@ -82,7 +97,9 @@ public class DialogBox extends HBox {
      * @return Neil dialog box.
      */
     public static DialogBox getNeilDialog(String text) {
-        DialogBox dialogBox = new DialogBox(text, NEIL_PLACEHOLDER);
+        DialogBox dialogBox = new DialogBox(text);
+        dialogBox.displayPicture.setText(NEIL_PLACEHOLDER);
+        dialogBox.limitContentWidth(NEIL_CONTENT_WIDTH_RATIO);
         dialogBox.flip();
         dialogBox.getStyleClass().add("neil-dialog");
         return dialogBox;

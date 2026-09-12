@@ -16,11 +16,12 @@
 
 .dialog-content {
     -fx-background-radius: 14px;
-    -fx-padding: 10px 14px 10px 14px;
+    -fx-padding: 9px 12px 9px 12px;
 }
 
 .user-dialog .dialog-content {
     -fx-background-color: #2f6fed;
+    -fx-background-radius: 14px 14px 4px 14px;
     -fx-text-fill: white;
 }
 
@@ -31,7 +32,8 @@
 .neil-dialog .dialog-content {
     -fx-background-color: white;
     -fx-border-color: #dfe5ee;
-    -fx-border-radius: 14px;
+    -fx-background-radius: 4px 14px 14px 14px;
+    -fx-border-radius: 4px 14px 14px 14px;
     -fx-text-fill: #172033;
 }
 
@@ -41,7 +43,7 @@
 
 .avatar-placeholder {
     -fx-background-color: #d9e2f2;
-    -fx-background-radius: 22px;
+    -fx-background-radius: 14px;
     -fx-font-size: 11px;
     -fx-font-weight: bold;
     -fx-text-fill: #34415a;
