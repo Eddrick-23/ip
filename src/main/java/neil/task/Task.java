@@ -148,10 +148,16 @@ public abstract class Task {
             throw new NeilException("Invalid saved event: " + line);
         }
 
-        return new EventTask(
-                description,
-                parts[3],
-                parts[4]
-        );
+        try {
+            return new EventTask(
+                    description,
+                    parts[3],
+                    parts[4]
+            );
+        } catch (DateTimeParseException e) {
+            throw new NeilException("Invalid saved event date/time: " + line);
+        } catch (IllegalArgumentException e) {
+            throw new NeilException("Saved event start must be earlier than its end: " + line);
+        }
     }
 }

@@ -86,11 +86,15 @@ class TaskTest {
 
     @Test
     void decode_eventTask_eventTaskReconstructed() throws NeilException {
-        Task task = Task.decode("E | 0 | team meeting | Monday 2pm | Monday 4pm");
+        Task task = Task.decode("E | 0 | team meeting | 2026-08-25 14:00 | 2026-08-25 16:00");
 
         assertInstanceOf(EventTask.class, task);
-        assertEquals("[E][ ] team meeting (from: Monday 2pm to: Monday 4pm)", task.toString());
-        assertEquals("E | 0 | team meeting | Monday 2pm | Monday 4pm", task.encode());
+        assertEquals(
+                "[E][ ] team meeting (from: 2026-08-25 14:00 to: 2026-08-25 16:00)",
+                task.toString());
+        assertEquals(
+                "E | 0 | team meeting | 2026-08-25 14:00 | 2026-08-25 16:00",
+                task.encode());
     }
 
     @Test
@@ -134,14 +138,27 @@ class TaskTest {
     @Test
     void decode_deadlineOrEventWithExtraField_exceptionThrown() {
         assertInvalidSavedTask("D | 0 | return book | 2026-08-25 | extra");
-        assertInvalidSavedTask("E | 0 | team meeting | Monday 2pm | Monday 4pm | extra");
+        assertInvalidSavedTask(
+                "E | 0 | team meeting | 2026-08-25 14:00 | 2026-08-25 16:00 | extra");
     }
 
     @Test
     void decode_eventWithMissingOrBlankTime_exceptionThrown() {
-        assertInvalidSavedTask("E | 0 | team meeting | Monday 2pm");
-        assertInvalidSavedTask("E | 0 | team meeting |  | Monday 4pm");
-        assertInvalidSavedTask("E | 0 | team meeting | Monday 2pm | ");
+        assertInvalidSavedTask("E | 0 | team meeting | 2026-08-25 14:00");
+        assertInvalidSavedTask("E | 0 | team meeting |  | 2026-08-25 16:00");
+        assertInvalidSavedTask("E | 0 | team meeting | 2026-08-25 14:00 | ");
+    }
+
+    @Test
+    void decode_eventWithInvalidDateOrTime_exceptionThrown() {
+        assertInvalidSavedTask("E | 0 | meeting | 2026-02-30 14:00 | 2026-03-01 16:00");
+        assertInvalidSavedTask("E | 0 | meeting | 2026-08-25 25:00 | 2026-08-26 16:00");
+    }
+
+    @Test
+    void decode_eventStartNotEarlierThanEnd_exceptionThrown() {
+        assertInvalidSavedTask("E | 0 | meeting | 2026-08-25 14:00 | 2026-08-25 14:00");
+        assertInvalidSavedTask("E | 0 | meeting | 2026-08-25 16:00 | 2026-08-25 14:00");
     }
 
     @Test

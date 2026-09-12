@@ -56,7 +56,7 @@ public class Ui {
                 formatHelpRow(
                         "event DESCRIPTION /from START /to END",
                         "Add an event task.",
-                        "event meeting /from 2pm /to 3pm"
+                        "event meeting /from 2026-09-15 14:00 /to 2026-09-15 15:00"
                 ),
                 formatHelpRow("list", "Show all tasks.", "list"),
                 formatHelpRow("mark NUMBER", "Mark a task as done.", "mark 1"),
@@ -66,7 +66,8 @@ public class Ui {
                 formatHelpRow("help", "Show this help table.", "help"),
                 formatHelpRow("bye", "Exit Neil.", "bye"),
                 "",
-                "NUMBER is the task number shown by list."
+                "NUMBER is the task number shown by list.",
+                "START and END use yyyy-MM-dd HH:mm and START must be earlier than END."
         );
     }
 

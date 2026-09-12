@@ -39,18 +39,19 @@ class StorageTest {
         Task todo = new ToDoTask("read book");
         Task deadline = new DeadlineTask("return book", java.time.LocalDate.of(2026, 8, 25));
         deadline.markAsDone();
-        Task event = new EventTask("team meeting", "Monday 2pm", "Monday 4pm");
+        Task event = new EventTask("team meeting", "2026-08-25 14:00", "2026-08-25 16:00");
 
         storage.save(List.of(todo, deadline, event));
 
         assertEquals(List.of(
                 "T | 0 | read book",
                 "D | 1 | return book | 2026-08-25",
-                "E | 0 | team meeting | Monday 2pm | Monday 4pm"), Files.readAllLines(taskFile));
+                "E | 0 | team meeting | 2026-08-25 14:00 | 2026-08-25 16:00"),
+                Files.readAllLines(taskFile));
         assertEquals(List.of(
                 "T | 0 | read book",
                 "D | 1 | return book | 2026-08-25",
-                "E | 0 | team meeting | Monday 2pm | Monday 4pm"),
+                "E | 0 | team meeting | 2026-08-25 14:00 | 2026-08-25 16:00"),
                 storage.load().stream().map(Task::encode).toList());
     }
 
