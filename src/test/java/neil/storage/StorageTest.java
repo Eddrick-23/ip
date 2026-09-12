@@ -2,6 +2,7 @@ package neil.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -88,6 +89,34 @@ class StorageTest {
     }
 
     @Test
+    void save_targetIsDirectory_exceptionThrownAndDirectoryPreserved() throws IOException {
+        Path storageDirectory = temporaryDirectory.resolve("tasks");
+        Files.createDirectory(storageDirectory);
+        Path existingFile = storageDirectory.resolve("existing.txt");
+        Files.writeString(existingFile, "existing data");
+        Storage storage = new Storage(storageDirectory.toString());
+        Task task = new ToDoTask("read book");
+
+        NeilException exception = assertThrows(NeilException.class, () -> storage.save(List.of(task)));
+
+        assertEquals("Neil: Unable to save tasks to " + storageDirectory, exception.getMessage());
+        assertTrue(Files.isDirectory(storageDirectory));
+        assertEquals("existing data", Files.readString(existingFile));
+    }
+
+    @Test
+    void save_emptyTaskList_existingFileReplacedWithEmptyFile() throws NeilException, IOException {
+        Path taskFile = temporaryDirectory.resolve("tasks.txt");
+        Files.writeString(taskFile, "T | 0 | existing task\n");
+        Storage storage = new Storage(taskFile.toString());
+
+        storage.save(List.of());
+
+        assertEquals(0, Files.size(taskFile));
+        assertEquals(List.of(), storage.load());
+    }
+
+    @Test
     void load_fileWithBlankLines_blankLinesIgnored() throws NeilException, IOException {
         Path taskFile = temporaryDirectory.resolve("tasks.txt");
         Files.writeString(taskFile, "\nT | 0 | read book\n   \n");
@@ -104,5 +133,27 @@ class StorageTest {
         Storage storage = new Storage(taskFile.toString());
 
         assertThrows(NeilException.class, storage::load);
+    }
+
+    @Test
+    void load_targetIsDirectory_exceptionThrown() throws IOException {
+        Path storageDirectory = temporaryDirectory.resolve("tasks");
+        Files.createDirectory(storageDirectory);
+        Storage storage = new Storage(storageDirectory.toString());
+
+        NeilException exception = assertThrows(NeilException.class, storage::load);
+
+        assertEquals("Neil: Unable to load tasks from " + storageDirectory, exception.getMessage());
+    }
+
+    @Test
+    void load_fileContainsMalformedUtf8_exceptionThrown() throws IOException {
+        Path taskFile = temporaryDirectory.resolve("tasks.txt");
+        Files.write(taskFile, new byte[] {(byte) 0xC3, (byte) 0x28});
+        Storage storage = new Storage(taskFile.toString());
+
+        NeilException exception = assertThrows(NeilException.class, storage::load);
+
+        assertEquals("Neil: Unable to load tasks from " + taskFile, exception.getMessage());
     }
 }
