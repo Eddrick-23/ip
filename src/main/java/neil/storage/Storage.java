@@ -1,9 +1,13 @@
 package neil.storage;
 
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,17 +39,61 @@ public class Storage {
         List<String> lines = tasks.stream()
                 .map(Task::encode)
                 .toList();
+        Path temporaryFile = null;
 
         try {
-            Path parentDirectory = filePath.getParent();
+            Path absoluteFilePath = filePath.toAbsolutePath();
+            Path parentDirectory = absoluteFilePath.getParent();
 
-            if (parentDirectory != null) {
-                Files.createDirectories(parentDirectory);
+            if (parentDirectory == null) {
+                throw new IOException("Storage file has no parent directory");
             }
 
-            Files.write(filePath, lines, StandardCharsets.UTF_8);
+            Files.createDirectories(parentDirectory);
+            temporaryFile = Files.createTempFile(parentDirectory, ".neil-", ".tmp");
+            Files.write(temporaryFile, lines, StandardCharsets.UTF_8);
+
+            try (FileChannel channel = FileChannel.open(temporaryFile, StandardOpenOption.WRITE)) {
+                channel.force(true);
+            }
+
+            replaceFile(temporaryFile, absoluteFilePath);
+            temporaryFile = null;
         } catch (IOException e) {
             throw new NeilException("Unable to save tasks to " + filePath);
+        } finally {
+            deleteTemporaryFile(temporaryFile);
+        }
+    }
+
+    /**
+     * Replaces the storage file atomically when supported by its file system.
+     *
+     * @param temporaryFile complete temporary storage file.
+     * @param targetFile storage file to replace.
+     * @throws IOException if the replacement fails.
+     */
+    void replaceFile(Path temporaryFile, Path targetFile) throws IOException {
+        try {
+            Files.move(
+                    temporaryFile,
+                    targetFile,
+                    StandardCopyOption.ATOMIC_MOVE,
+                    StandardCopyOption.REPLACE_EXISTING);
+        } catch (AtomicMoveNotSupportedException e) {
+            Files.move(temporaryFile, targetFile, StandardCopyOption.REPLACE_EXISTING);
+        }
+    }
+
+    private void deleteTemporaryFile(Path temporaryFile) {
+        if (temporaryFile == null) {
+            return;
+        }
+
+        try {
+            Files.deleteIfExists(temporaryFile);
+        } catch (IOException e) {
+            // Preserve the original save failure rather than replacing it with a cleanup failure.
         }
     }
 

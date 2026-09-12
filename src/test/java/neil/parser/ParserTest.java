@@ -35,10 +35,11 @@ class ParserTest {
 
     @Test
     void parseTask_eventCommandWithExtraWhitespace_eventTaskCreated() throws NeilException {
-        Task task = Parser.parseTask("  event   team meeting   /from   Monday 2pm   /to   Monday 4pm  ");
+        Task task = Parser.parseTask(
+                "  event   team meeting   /from   2026-08-25 14:00   /to   2026-08-25 16:00  ");
 
         assertInstanceOf(EventTask.class, task);
-        assertEquals("E | 0 | team meeting | Monday 2pm | Monday 4pm", task.encode());
+        assertEquals("E | 0 | team meeting | 2026-08-25 14:00 | 2026-08-25 16:00", task.encode());
     }
 
     @Test
@@ -64,8 +65,21 @@ class ParserTest {
     @Test
     void parseTask_eventWithMissingOrBlankTime_exceptionThrown() {
         assertInvalidTaskInput("event team meeting");
-        assertInvalidTaskInput("event team meeting /from  /to Monday 4pm");
-        assertInvalidTaskInput("event team meeting /from Monday 2pm /to ");
+        assertInvalidTaskInput("event team meeting /from  /to 2026-08-25 16:00");
+        assertInvalidTaskInput("event team meeting /from 2026-08-25 14:00 /to ");
+    }
+
+    @Test
+    void parseTask_eventWithInvalidDateOrTime_exceptionThrown() {
+        assertInvalidTaskInput("event team meeting /from 2026-02-30 14:00 /to 2026-03-01 16:00");
+        assertInvalidTaskInput("event team meeting /from 2026-08-25 25:00 /to 2026-08-26 16:00");
+        assertInvalidTaskInput("event team meeting /from Monday 2pm /to Monday 4pm");
+    }
+
+    @Test
+    void parseTask_eventStartNotEarlierThanEnd_exceptionThrown() {
+        assertInvalidTaskInput("event meeting /from 2026-08-25 14:00 /to 2026-08-25 14:00");
+        assertInvalidTaskInput("event meeting /from 2026-08-25 16:00 /to 2026-08-25 14:00");
     }
 
     @Test

@@ -45,7 +45,7 @@ class UiTest {
                 List.of(
                         "event DESCRIPTION /from START /to END",
                         "Add an event task.",
-                        "event meeting /from 2pm /to 3pm"
+                        "event meeting /from 2026-09-15 14:00 /to 2026-09-15 15:00"
                 ),
                 List.of("list", "Show all tasks.", "list"),
                 List.of("mark NUMBER", "Mark a task as done.", "mark 1"),
@@ -56,6 +56,9 @@ class UiTest {
                 List.of("bye", "Exit Neil.", "bye")
         ), rows);
         assertEquals("NUMBER is the task number shown by list.", lines[15]);
+        assertEquals(
+                "START and END use yyyy-MM-dd HH:mm and START must be earlier than END.",
+                lines[16]);
     }
 
     @Test

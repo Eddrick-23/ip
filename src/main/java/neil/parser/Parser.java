@@ -90,11 +90,18 @@ public final class Parser {
             throw new NeilException("Use: event DESCRIPTION /from START /to END");
         }
 
-        return new EventTask(
-                fromParts[0].trim(),
-                toParts[0].trim(),
-                toParts[1].trim()
-        );
+        try {
+            return new EventTask(
+                    fromParts[0].trim(),
+                    toParts[0].trim(),
+                    toParts[1].trim()
+            );
+        } catch (DateTimeParseException e) {
+            throw new NeilException(
+                    "Please provide valid event dates and times in yyyy-MM-dd HH:mm format");
+        } catch (IllegalArgumentException e) {
+            throw new NeilException("The event start must be earlier than the event end");
+        }
     }
 
     /**

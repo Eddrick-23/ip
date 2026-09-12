@@ -112,7 +112,10 @@ class ToDoListTest {
     void findTasks_multipleMatchingDescriptions_matchesReturnedInOrder() {
         ToDoList taskList = new ToDoList();
         Task firstMatch = new ToDoTask("read book");
-        Task nonMatch = new EventTask("attend meeting", "book shop", "library");
+        Task nonMatch = new EventTask(
+                "attend meeting",
+                "2026-08-25 14:00",
+                "2026-08-25 16:00");
         Task secondMatch = new DeadlineTask("return BOOK", LocalDate.of(2026, 8, 30));
         taskList.add(firstMatch);
         taskList.add(nonMatch);

@@ -114,9 +114,9 @@ public class Neil {
      * Returns whether the specified command should exit the application.
      *
      * @param input raw user command.
-     * @return true if the command is {@code bye}, ignoring letter case.
+     * @return true if the command is {@code bye}, ignoring surrounding whitespace and letter case.
      */
     public boolean isExitCommand(String input) {
-        return input.equalsIgnoreCase("bye");
+        return input.strip().equalsIgnoreCase("bye");
     }
 }

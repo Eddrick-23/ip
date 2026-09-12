@@ -114,11 +114,12 @@ class NeilTest {
     void getResponse_byeCommand_goodbyeReturnedAndExitRequested() {
         Neil neil = new Neil(temporaryDirectory.resolve("tasks.txt").toString());
 
-        CommandResult response = neil.getResponse("BYE");
+        CommandResult response = neil.getResponse("  BYE  ");
 
         assertEquals("Bye. Hope to see you again soon!", response.message());
         assertFalse(response.isError());
         assertTrue(neil.isExitCommand("bye"));
-        assertFalse(neil.isExitCommand(" bye "));
+        assertTrue(neil.isExitCommand("\t bye \t"));
+        assertFalse(neil.isExitCommand("bye now"));
     }
 }
