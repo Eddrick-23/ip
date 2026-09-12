@@ -20,6 +20,12 @@
                        styleClass="welcome-banner"
                        text="Banner"
                        visible="false" />
+                <Label fx:id="errorTitle"
+                       managed="false"
+                       minHeight="-Infinity"
+                       styleClass="error-title"
+                       text="Error"
+                       visible="false" />
                 <Label fx:id="dialog"
                        maxWidth="1.7976931348623157E308"
                        minHeight="-Infinity"

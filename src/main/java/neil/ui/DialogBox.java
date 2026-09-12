@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
  * Represents one message and speaker placeholder in the chat window.
  */
 public class DialogBox extends HBox {
+    private static final String ERROR_TITLE = "Couldn't process that";
     private static final double NEIL_CONTENT_WIDTH_RATIO = 0.86;
     private static final double USER_CONTENT_WIDTH_RATIO = 0.70;
     private static final String NEIL_PLACEHOLDER = "N";
@@ -25,6 +26,8 @@ public class DialogBox extends HBox {
     private Label dialog;
     @FXML
     private Label displayPicture;
+    @FXML
+    private Label errorTitle;
     @FXML
     private Label welcomeBanner;
     @FXML
@@ -42,6 +45,7 @@ public class DialogBox extends HBox {
 
         assert dialog != null : "FXML must inject dialog";
         assert displayPicture != null : "FXML must inject displayPicture";
+        assert errorTitle != null : "FXML must inject errorTitle";
         assert welcomeBanner != null : "FXML must inject welcomeBanner";
         assert dialogContent != null : "FXML must inject dialogContent";
 
@@ -76,6 +80,12 @@ public class DialogBox extends HBox {
         dialog.setText(welcomeParts[1]);
     }
 
+    private void formatErrorMessage() {
+        errorTitle.setText(ERROR_TITLE);
+        errorTitle.setManaged(true);
+        errorTitle.setVisible(true);
+    }
+
     /**
      * Returns a right-aligned dialog containing a user message.
      *
@@ -102,6 +112,19 @@ public class DialogBox extends HBox {
         dialogBox.limitContentWidth(NEIL_CONTENT_WIDTH_RATIO);
         dialogBox.flip();
         dialogBox.getStyleClass().add("neil-dialog");
+        return dialogBox;
+    }
+
+    /**
+     * Returns a visually highlighted Neil dialog containing an error message.
+     *
+     * @param text error response produced by Neil.
+     * @return Neil error dialog box.
+     */
+    public static DialogBox getNeilErrorDialog(String text) {
+        DialogBox dialogBox = getNeilDialog(text);
+        dialogBox.formatErrorMessage();
+        dialogBox.getStyleClass().add("error-dialog");
         return dialogBox;
     }
 

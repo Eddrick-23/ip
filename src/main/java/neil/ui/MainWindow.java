@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import neil.CommandResult;
 import neil.Neil;
 
 /**
@@ -40,7 +41,11 @@ public class MainWindow {
      */
     public void setNeil(Neil neil) {
         this.neil = neil;
-        dialogContainer.getChildren().add(DialogBox.getNeilWelcomeDialog(neil.getWelcomeMessage()));
+        CommandResult welcomeResponse = neil.getWelcomeResponse();
+        DialogBox welcomeDialog = welcomeResponse.isError()
+                ? DialogBox.getNeilErrorDialog(welcomeResponse.message())
+                : DialogBox.getNeilWelcomeDialog(welcomeResponse.message());
+        dialogContainer.getChildren().add(welcomeDialog);
     }
 
     @FXML
@@ -48,11 +53,14 @@ public class MainWindow {
         assert neil != null : "setNeil must be called before handling user input";
 
         String input = userInput.getText();
-        String response = neil.getResponse(input);
+        CommandResult response = neil.getResponse(input);
+        DialogBox responseDialog = response.isError()
+                ? DialogBox.getNeilErrorDialog(response.message())
+                : DialogBox.getNeilDialog(response.message());
 
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input),
-                DialogBox.getNeilDialog(response)
+                responseDialog
         );
         userInput.clear();
 

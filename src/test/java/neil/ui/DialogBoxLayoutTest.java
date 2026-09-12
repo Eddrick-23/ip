@@ -18,6 +18,7 @@ class DialogBoxLayoutTest {
         String fxml = readResource("/view/DialogBox.fxml");
 
         assertTrue(fxml.contains("fx:id=\"dialogContent\""));
+        assertTrue(fxml.contains("fx:id=\"errorTitle\""));
         assertFalse(fxml.contains("maxWidth=\"310.0\""));
         assertFalse(fxml.contains("maxWidth=\"282.0\""));
     }
