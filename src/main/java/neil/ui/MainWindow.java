@@ -1,6 +1,7 @@
 package neil.ui;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -32,6 +33,8 @@ public class MainWindow {
         assert sendButton != null : "FXML must inject sendButton";
 
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        sendButton.disableProperty().bind(Bindings.createBooleanBinding(() -> userInput.getText().isBlank(),
+                userInput.textProperty()));
     }
 
     /**
@@ -53,6 +56,10 @@ public class MainWindow {
         assert neil != null : "setNeil must be called before handling user input";
 
         String input = userInput.getText();
+        if (input.isBlank()) {
+            return;
+        }
+
         CommandResult response = neil.getResponse(input);
         DialogBox responseDialog = response.isError()
                 ? DialogBox.getNeilErrorDialog(response.message())

@@ -68,8 +68,15 @@
     -fx-text-fill: #34415a;
 }
 
-#userInput {
+.composer-bar {
     -fx-background-color: white;
+    -fx-border-color: #dfe5ee transparent transparent transparent;
+    -fx-border-width: 1px 0 0 0;
+    -fx-padding: 10px 12px 10px 12px;
+}
+
+#userInput {
+    -fx-background-color: #f8fafc;
     -fx-background-radius: 8px;
     -fx-border-color: #cbd5e1;
     -fx-border-radius: 8px;
@@ -84,10 +91,29 @@
 #sendButton {
     -fx-background-color: #2f6fed;
     -fx-background-radius: 8px;
-    -fx-font-weight: bold;
+    -fx-border-color: transparent;
+    -fx-border-radius: 8px;
+    -fx-border-width: 2px;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-padding: 0 14px 0 14px;
     -fx-text-fill: white;
 }
 
 #sendButton:hover {
     -fx-background-color: #245ccc;
+}
+
+#sendButton:pressed {
+    -fx-background-color: #1d4ea3;
+}
+
+#sendButton:focused {
+    -fx-border-color: #9cbcff;
+}
+
+#sendButton:disabled {
+    -fx-background-color: #d8dee8;
+    -fx-text-fill: #64748b;
+    -fx-opacity: 1;
 }
