@@ -14,7 +14,7 @@ public class Neil {
     private final Storage storage;
     private final Ui ui;
     private final ToDoList toDoList;
-    private final String startupErrorMessage;
+    private final CommandResult startupError;
 
     /**
      * Creates the application using the specified storage file.
@@ -25,40 +25,40 @@ public class Neil {
         this.storage = new Storage(filePath);
         this.ui = new Ui();
         this.toDoList = new ToDoList();
-        String loadingError = null;
+        CommandResult loadingError = null;
 
         try {
             for (Task task : storage.load()) {
                 toDoList.add(task);
             }
         } catch (NeilException e) {
-            loadingError = ui.showError(e.getMessage());
+            loadingError = CommandResult.error(ui.showError(e.getMessage()));
         }
 
-        this.startupErrorMessage = loadingError;
+        this.startupError = loadingError;
     }
 
     /**
      * Returns the message shown when the application starts.
      *
-     * @return welcome message, or a storage error if saved tasks could not be loaded.
+     * @return welcome result, or a storage error if saved tasks could not be loaded.
      */
-    public String getWelcomeMessage() {
-        if (startupErrorMessage != null) {
-            return startupErrorMessage;
+    public CommandResult getWelcomeResponse() {
+        if (startupError != null) {
+            return startupError;
         }
-        return ui.showWelcome();
+        return CommandResult.normal(ui.showWelcome());
     }
 
     /**
      * Processes one user command and returns Neil's response.
      *
      * @param input raw user command.
-     * @return response to display in the user interface.
+     * @return result to display in the user interface.
      */
-    public String getResponse(String input) {
+    public CommandResult getResponse(String input) {
         if (isExitCommand(input)) {
-            return ui.showGoodbye();
+            return CommandResult.normal(ui.showGoodbye());
         }
 
         String[] parts = input.trim().split("\\s+");
@@ -67,11 +67,11 @@ public class Neil {
                 if (parts.length != 1) {
                     throw new NeilException("Use: help");
                 }
-                return ui.showHelp();
+                return CommandResult.help(ui.showHelp());
             }
 
-            if (startupErrorMessage != null) {
-                return startupErrorMessage;
+            if (startupError != null) {
+                return startupError;
             }
 
             switch (parts[0]) {
@@ -79,34 +79,34 @@ public class Neil {
                     int taskNumber = Parser.parseTaskNumber(parts);
                     Task task = toDoList.markTaskAsDone(taskNumber);
                     storage.save(toDoList.getTasks());
-                    return ui.showTaskMarked(task);
+                    return CommandResult.normal(ui.showTaskMarked(task));
                 }
                 case "unmark": {
                     int taskNumber = Parser.parseTaskNumber(parts);
                     Task task = toDoList.unmarkTask(taskNumber);
                     storage.save(toDoList.getTasks());
-                    return ui.showTaskUnmarked(task);
+                    return CommandResult.normal(ui.showTaskUnmarked(task));
                 }
                 case "delete": {
                     int taskNumber = Parser.parseTaskNumber(parts);
                     Task task = toDoList.remove(taskNumber);
                     storage.save(toDoList.getTasks());
-                    return ui.showTaskDeleted(task, toDoList.size());
+                    return CommandResult.normal(ui.showTaskDeleted(task, toDoList.size()));
                 }
                 case "list":
-                    return ui.showTaskList(toDoList);
+                    return CommandResult.normal(ui.showTaskList(toDoList));
                 case "find": {
                     String keyword = Parser.parseFindKeyword(input);
-                    return ui.showMatchingTasks(toDoList.findTasks(keyword));
+                    return CommandResult.normal(ui.showMatchingTasks(toDoList.findTasks(keyword)));
                 }
                 default:
                     Task task = Parser.parseTask(input);
                     toDoList.add(task);
                     storage.save(toDoList.getTasks());
-                    return ui.showTaskAdded(task, toDoList.size());
+                    return CommandResult.normal(ui.showTaskAdded(task, toDoList.size()));
             }
         } catch (NeilException e) {
-            return ui.showError(e.getMessage());
+            return CommandResult.error(ui.showError(e.getMessage()));
         }
     }
 

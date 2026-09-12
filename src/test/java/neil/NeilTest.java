@@ -29,15 +29,15 @@ class NeilTest {
         assertEquals(
                 "Got it. I've added this task:\n[T][ ] read book\n"
                         + "Now you have 1 tasks in the list.",
-                neil.getResponse("todo read book")
+                neil.getResponse("todo read book").message()
         );
         assertEquals(
                 "Nice! I've marked this task as done:\n[T][X] read book",
-                neil.getResponse("mark 1")
+                neil.getResponse("mark 1").message()
         );
         assertEquals(
                 "Here are the matching tasks in your list:\n1.[T][X] read book",
-                neil.getResponse("find BOOK")
+                neil.getResponse("find BOOK").message()
         );
         assertEquals(List.of("T | 1 | read book"), Files.readAllLines(storageFile));
     }
@@ -51,7 +51,7 @@ class NeilTest {
 
         assertEquals(
                 "Here are the tasks in your list:\n1.[T][ ] read book\n",
-                neil.getResponse("list")
+                neil.getResponse("list").message()
         );
     }
 
@@ -60,8 +60,10 @@ class NeilTest {
         Path storageFile = temporaryDirectory.resolve("tasks.txt");
         Files.writeString(storageFile, "T | 0 | read book\n");
         Neil neil = new Neil(storageFile.toString());
+        CommandResult response = neil.getResponse("  help  ");
 
-        assertEquals(new Ui().showHelp(), neil.getResponse("  help  "));
+        assertEquals(new Ui().showHelp(), response.message());
+        assertTrue(response.isHelp());
         assertEquals(List.of("T | 0 | read book"), Files.readAllLines(storageFile));
     }
 
@@ -70,23 +72,41 @@ class NeilTest {
         Path storageDirectory = temporaryDirectory.resolve("tasks");
         Files.createDirectory(storageDirectory);
         Neil neil = new Neil(storageDirectory.toString());
+        CommandResult response = neil.getResponse("help");
 
-        assertEquals(new Ui().showHelp(), neil.getResponse("help"));
+        assertEquals(new Ui().showHelp(), response.message());
+        assertTrue(response.isHelp());
+    }
+
+    @Test
+    void getWelcomeResponse_storageError_errorResultReturned() throws IOException {
+        Path storageDirectory = temporaryDirectory.resolve("tasks");
+        Files.createDirectory(storageDirectory);
+        Neil neil = new Neil(storageDirectory.toString());
+
+        assertTrue(neil.getWelcomeResponse().isError());
     }
 
     @Test
     void getResponse_invalidHelpCommand_errorReturned() {
         Neil neil = new Neil(temporaryDirectory.resolve("tasks.txt").toString());
+        CommandResult uppercaseResponse = neil.getResponse("HELP");
+        CommandResult argumentsResponse = neil.getResponse("help deadline");
 
-        assertEquals("Neil: command HELP not supported", neil.getResponse("HELP"));
-        assertEquals("Neil: Use: help", neil.getResponse("help deadline"));
+        assertEquals("Neil: command HELP not supported", uppercaseResponse.message());
+        assertEquals("Neil: Use: help", argumentsResponse.message());
+        assertTrue(uppercaseResponse.isError());
+        assertTrue(argumentsResponse.isError());
     }
 
     @Test
     void getResponse_invalidCommand_errorReturnedWithoutExiting() {
         Neil neil = new Neil(temporaryDirectory.resolve("tasks.txt").toString());
 
-        assertEquals("Neil: command hello not supported", neil.getResponse("hello"));
+        CommandResult response = neil.getResponse("hello");
+
+        assertEquals("Neil: command hello not supported", response.message());
+        assertTrue(response.isError());
         assertFalse(neil.isExitCommand("hello"));
     }
 
@@ -94,7 +114,10 @@ class NeilTest {
     void getResponse_byeCommand_goodbyeReturnedAndExitRequested() {
         Neil neil = new Neil(temporaryDirectory.resolve("tasks.txt").toString());
 
-        assertEquals("Bye. Hope to see you again soon!", neil.getResponse("BYE"));
+        CommandResult response = neil.getResponse("BYE");
+
+        assertEquals("Bye. Hope to see you again soon!", response.message());
+        assertFalse(response.isError());
         assertTrue(neil.isExitCommand("bye"));
         assertFalse(neil.isExitCommand(" bye "));
     }

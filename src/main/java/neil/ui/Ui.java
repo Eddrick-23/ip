@@ -9,6 +9,11 @@ import neil.task.ToDoList;
  * Formats messages shown to the user.
  */
 public class Ui {
+    private static final int HELP_COMMAND_WIDTH = 40;
+    private static final int HELP_PURPOSE_WIDTH = 26;
+    private static final String HELP_ROW_FORMAT = "%-" + HELP_COMMAND_WIDTH + "s  %-"
+            + HELP_PURPOSE_WIDTH + "s  %s";
+
     /**
      * Returns the welcome message.
      *
@@ -32,56 +37,41 @@ public class Ui {
      * @return command descriptions and examples.
      */
     public String showHelp() {
-        return "AVAILABLE COMMANDS\n"
-                + "==================\n"
-                + "\n"
-                + "ADD TASKS\n"
-                + "---------\n"
-                + "\n"
-                + "todo DESCRIPTION\n"
-                + "  Adds a todo task.\n"
-                + "  Example: todo read book\n"
-                + "\n"
-                + "deadline DESCRIPTION /by YYYY-MM-DD\n"
-                + "  Adds a deadline task.\n"
-                + "  Example: deadline return book /by 2026-09-15\n"
-                + "\n"
-                + "event DESCRIPTION /from START /to END\n"
-                + "  Adds an event task.\n"
-                + "  Example: event meeting /from 2pm /to 3pm\n"
-                + "\n"
-                + "MANAGE TASKS\n"
-                + "------------\n"
-                + "\n"
-                + "list\n"
-                + "  Shows all tasks.\n"
-                + "\n"
-                + "mark NUMBER\n"
-                + "  Marks a task as done.\n"
-                + "  Example: mark 1\n"
-                + "\n"
-                + "unmark NUMBER\n"
-                + "  Marks a task as not done.\n"
-                + "  Example: unmark 1\n"
-                + "\n"
-                + "delete NUMBER\n"
-                + "  Deletes a task.\n"
-                + "  Example: delete 1\n"
-                + "\n"
-                + "find KEYWORD\n"
-                + "  Finds matching tasks.\n"
-                + "  Example: find book\n"
-                + "\n"
-                + "OTHER\n"
-                + "-----\n"
-                + "\n"
-                + "help\n"
-                + "  Shows this help message.\n"
-                + "\n"
-                + "bye\n"
-                + "  Exits Neil.\n"
-                + "\n"
-                + "NUMBER is the task number shown by list.";
+        return String.join(
+                "\n",
+                "AVAILABLE COMMANDS",
+                "",
+                formatHelpRow("COMMAND", "PURPOSE", "EXAMPLE"),
+                formatHelpRow(
+                        "-".repeat(HELP_COMMAND_WIDTH),
+                        "-".repeat(HELP_PURPOSE_WIDTH),
+                        "-".repeat(42)
+                ),
+                formatHelpRow("todo DESCRIPTION", "Add a todo task.", "todo read book"),
+                formatHelpRow(
+                        "deadline DESCRIPTION /by YYYY-MM-DD",
+                        "Add a deadline task.",
+                        "deadline return book /by 2026-09-15"
+                ),
+                formatHelpRow(
+                        "event DESCRIPTION /from START /to END",
+                        "Add an event task.",
+                        "event meeting /from 2pm /to 3pm"
+                ),
+                formatHelpRow("list", "Show all tasks.", "list"),
+                formatHelpRow("mark NUMBER", "Mark a task as done.", "mark 1"),
+                formatHelpRow("unmark NUMBER", "Mark a task as not done.", "unmark 1"),
+                formatHelpRow("delete NUMBER", "Delete a task.", "delete 1"),
+                formatHelpRow("find KEYWORD", "Find matching tasks.", "find book"),
+                formatHelpRow("help", "Show this help table.", "help"),
+                formatHelpRow("bye", "Exit Neil.", "bye"),
+                "",
+                "NUMBER is the task number shown by list."
+        );
+    }
+
+    private String formatHelpRow(String command, String purpose, String example) {
+        return String.format(HELP_ROW_FORMAT, command, purpose, example);
     }
 
     /**

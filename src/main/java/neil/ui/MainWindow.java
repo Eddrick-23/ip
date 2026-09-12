@@ -1,11 +1,13 @@
 package neil.ui;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import neil.CommandResult;
 import neil.Neil;
 
 /**
@@ -31,6 +33,8 @@ public class MainWindow {
         assert sendButton != null : "FXML must inject sendButton";
 
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        sendButton.disableProperty().bind(Bindings.createBooleanBinding(() -> userInput.getText().isBlank(),
+                userInput.textProperty()));
     }
 
     /**
@@ -40,7 +44,11 @@ public class MainWindow {
      */
     public void setNeil(Neil neil) {
         this.neil = neil;
-        dialogContainer.getChildren().add(DialogBox.getNeilWelcomeDialog(neil.getWelcomeMessage()));
+        CommandResult welcomeResponse = neil.getWelcomeResponse();
+        DialogBox welcomeDialog = welcomeResponse.isError()
+                ? DialogBox.getNeilErrorDialog(welcomeResponse.message())
+                : DialogBox.getNeilWelcomeDialog(welcomeResponse.message());
+        dialogContainer.getChildren().add(welcomeDialog);
     }
 
     @FXML
@@ -48,16 +56,31 @@ public class MainWindow {
         assert neil != null : "setNeil must be called before handling user input";
 
         String input = userInput.getText();
-        String response = neil.getResponse(input);
+        if (input.isBlank()) {
+            return;
+        }
+
+        CommandResult response = neil.getResponse(input);
+        DialogBox responseDialog = createResponseDialog(response);
 
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input),
-                DialogBox.getNeilDialog(response)
+                responseDialog
         );
         userInput.clear();
 
         if (neil.isExitCommand(input)) {
             Platform.exit();
         }
+    }
+
+    private DialogBox createResponseDialog(CommandResult response) {
+        if (response.isError()) {
+            return DialogBox.getNeilErrorDialog(response.message());
+        }
+        if (response.isHelp()) {
+            return DialogBox.getNeilHelpDialog(response.message());
+        }
+        return DialogBox.getNeilDialog(response.message());
     }
 }
