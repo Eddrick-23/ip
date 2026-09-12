@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -53,6 +54,37 @@ class StorageTest {
                 "D | 1 | return book | 2026-08-25",
                 "E | 0 | team meeting | 2026-08-25 14:00 | 2026-08-25 16:00"),
                 storage.load().stream().map(Task::encode).toList());
+    }
+
+    @Test
+    void save_existingFile_fileReplaced() throws NeilException, IOException {
+        Path taskFile = temporaryDirectory.resolve("tasks.txt");
+        Files.writeString(taskFile, "T | 0 | existing task\n");
+        Storage storage = new Storage(taskFile.toString());
+
+        storage.save(List.of(new ToDoTask("replacement task")));
+
+        assertEquals(List.of("T | 0 | replacement task"), Files.readAllLines(taskFile));
+    }
+
+    @Test
+    void save_replacementFails_originalFilePreservedAndTemporaryFileRemoved() throws IOException {
+        Path taskFile = temporaryDirectory.resolve("tasks.txt");
+        Files.writeString(taskFile, "T | 0 | existing task\n");
+        Storage storage = new Storage(taskFile.toString()) {
+            @Override
+            void replaceFile(Path temporaryFile, Path targetFile) throws IOException {
+                assertEquals(List.of("T | 0 | replacement task"), Files.readAllLines(temporaryFile));
+                throw new IOException("Simulated replacement failure");
+            }
+        };
+
+        assertThrows(NeilException.class, () -> storage.save(List.of(new ToDoTask("replacement task"))));
+
+        assertEquals(List.of("T | 0 | existing task"), Files.readAllLines(taskFile));
+        try (Stream<Path> files = Files.list(temporaryDirectory)) {
+            assertEquals(List.of(taskFile), files.toList());
+        }
     }
 
     @Test
