@@ -29,6 +29,7 @@ Neil is a friendly desktop chatbot that helps you keep track of todos, deadlines
 - Dates use `YYYY-MM-DD`; event times use `YYYY-MM-DD HH:mm` in 24-hour time.
 - Commands are case-sensitive, except `bye`.
 - `NUMBER` means the task number shown by `list`.
+- Task details cannot contain the `|` character because it is reserved for saving data.
 
 ## Features
 

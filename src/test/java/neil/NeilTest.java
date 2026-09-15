@@ -105,6 +105,28 @@ class NeilTest {
     }
 
     @Test
+    void getResponse_taskDetailsContainStorageDelimiter_errorReturnedWithoutChangingStorage() throws IOException {
+        Path storageFile = temporaryDirectory.resolve("tasks.txt");
+        List<String> originalLines = List.of("T | 0 | existing task");
+        Files.write(storageFile, originalLines);
+        Neil neil = new Neil(storageFile.toString());
+        List<String> commands = List.of(
+                "todo compare A | B",
+                "deadline submit A | B /by 2026-08-25",
+                "event discuss A | B /from 2026-08-25 14:00 /to 2026-08-25 16:00");
+
+        for (String command : commands) {
+            CommandResult response = neil.getResponse(command);
+
+            assertEquals(
+                    "Neil: Task details cannot contain the | character",
+                    response.message());
+            assertTrue(response.isError());
+        }
+        assertEquals(originalLines, Files.readAllLines(storageFile));
+    }
+
+    @Test
     void constructor_savedTasksExist_tasksAvailableToCommands() throws IOException {
         Path storageFile = temporaryDirectory.resolve("tasks.txt");
         Files.writeString(storageFile, "T | 0 | read book\n");

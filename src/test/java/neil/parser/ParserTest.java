@@ -56,6 +56,14 @@ class ParserTest {
     }
 
     @Test
+    void parseTask_taskDetailsContainStorageDelimiter_exceptionThrown() {
+        assertStorageDelimiterRejected("todo compare A | B");
+        assertStorageDelimiterRejected("deadline submit A | B /by 2026-08-25");
+        assertStorageDelimiterRejected(
+                "event discuss A | B /from 2026-08-25 14:00 /to 2026-08-25 16:00");
+    }
+
+    @Test
     void parseTask_deadlineWithMissingOrInvalidDate_exceptionThrown() {
         assertInvalidTaskInput("deadline return book");
         assertInvalidTaskInput("deadline return book /by tomorrow");
@@ -118,6 +126,19 @@ class ParserTest {
      */
     private void assertInvalidTaskInput(String input) {
         assertThrows(NeilException.class, () -> Parser.parseTask(input));
+    }
+
+    /**
+     * Verifies that task details containing the storage delimiter are rejected.
+     *
+     * @param input task command containing the storage delimiter.
+     */
+    private void assertStorageDelimiterRejected(String input) {
+        NeilException exception = assertThrows(NeilException.class, () -> Parser.parseTask(input));
+
+        assertEquals(
+                "Neil: Task details cannot contain the | character",
+                exception.getMessage());
     }
 
     /**

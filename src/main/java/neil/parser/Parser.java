@@ -14,6 +14,7 @@ import neil.task.ToDoTask;
  * Converts raw user input into values understood by the application.
  */
 public final class Parser {
+    private static final char STORAGE_DELIMITER = '|';
     private static final Set<String> TASK_COMMANDS =
             Set.of("todo", "deadline", "event");
 
@@ -46,6 +47,7 @@ public final class Parser {
         }
 
         String arguments = parts[1].trim();
+        validateTaskArguments(arguments);
 
         switch (command) {
             case "todo":
@@ -57,6 +59,12 @@ public final class Parser {
             default:
                 assert false : "Unhandled validated task command: " + command;
                 throw new NeilException("Unknown Task type");
+        }
+    }
+
+    private static void validateTaskArguments(String arguments) throws NeilException {
+        if (arguments.indexOf(STORAGE_DELIMITER) >= 0) {
+            throw new NeilException("Task details cannot contain the | character");
         }
     }
 
