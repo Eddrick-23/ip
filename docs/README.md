@@ -2,6 +2,14 @@
 
 Neil is a friendly desktop chatbot that helps you keep track of todos, deadlines, and events using simple typed commands.
 
+## Table of contents
+
+- [Quick start](#quick-start)
+- [Command format](#command-format)
+- [Features](#features)
+- [Saving data](#saving-data)
+- [Command summary](#command-summary)
+
 ## Quick start
 
 1. Ensure that Java 25 or later is installed on your computer.
