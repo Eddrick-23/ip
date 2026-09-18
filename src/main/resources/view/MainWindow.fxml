@@ -34,7 +34,8 @@
                 <TextField fx:id="userInput"
                            maxWidth="1.7976931348623157E308"
                            onAction="#handleUserInput"
-                           promptText="Type a command..."
+                           onKeyPressed="#handleHistoryNavigation"
+                           promptText="Type a command... (Up/Down for history)"
                            HBox.hgrow="ALWAYS" />
                 <Button fx:id="sendButton"
                         minWidth="72.0"

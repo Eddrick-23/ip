@@ -21,6 +21,14 @@ class MainWindowLayoutTest {
     }
 
     @Test
+    void mainWindowFxml_commandHistory_hintAndKeyboardHandlerPresent() throws IOException {
+        String fxml = readResource("/view/MainWindow.fxml");
+
+        assertTrue(fxml.contains("onKeyPressed=\"#handleHistoryNavigation\""));
+        assertTrue(fxml.contains("promptText=\"Type a command... (Up/Down for history)\""));
+    }
+
+    @Test
     void mainCss_sendButtonStyled_allInteractionStatesPresent() throws IOException {
         String css = readResource("/css/main.css");
 

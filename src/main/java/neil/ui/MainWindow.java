@@ -1,11 +1,15 @@
 package neil.ui;
 
+import java.util.Optional;
+
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import neil.CommandResult;
 import neil.Neil;
@@ -23,6 +27,7 @@ public class MainWindow {
     @FXML
     private Button sendButton;
 
+    private final CommandHistory commandHistory = new CommandHistory();
     private Neil neil;
 
     @FXML
@@ -60,6 +65,7 @@ public class MainWindow {
             return;
         }
 
+        commandHistory.add(input);
         CommandResult response = neil.getResponse(input);
         DialogBox responseDialog = createResponseDialog(response);
 
@@ -72,6 +78,25 @@ public class MainWindow {
         if (neil.isExitCommand(input)) {
             Platform.exit();
         }
+    }
+
+    @FXML
+    private void handleHistoryNavigation(KeyEvent event) {
+        Optional<String> command;
+
+        if (event.getCode() == KeyCode.UP) {
+            command = commandHistory.getPrevious(userInput.getText());
+        } else if (event.getCode() == KeyCode.DOWN) {
+            command = commandHistory.getNext();
+        } else {
+            return;
+        }
+
+        command.ifPresent(value -> {
+            userInput.setText(value);
+            userInput.end();
+        });
+        event.consume();
     }
 
     private DialogBox createResponseDialog(CommandResult response) {

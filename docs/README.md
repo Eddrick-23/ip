@@ -100,6 +100,10 @@ Shows all commands and example formats inside Neil.
 
 Format: `help`
 
+### Reusing recent commands
+
+Neil remembers the 10 most recently submitted commands during the current session. With the command box focused, press the **Up Arrow** to move toward older commands or the **Down Arrow** to move toward newer commands. Navigation stops at the oldest command; moving past the newest command restores the text you were entering before browsing the history.
+
 ### Exiting Neil: `bye`
 
 Closes the application.
@@ -123,4 +127,5 @@ Neil automatically saves changes and reloads them the next time it starts. No ma
 | Find tasks | `find KEYWORD` |
 | Delete a task | `delete NUMBER` |
 | View help | `help` |
+| Reuse recent commands | **Up Arrow** / **Down Arrow** |
 | Exit Neil | `bye` |
